@@ -1,5 +1,4 @@
-// Generated from /home/joaovitor/NetBeansProjects/CC2-Compilador-LA-C/CC2-Compilador-LA-C/src/grammars/capiroto.g4 by ANTLR 4.1
-package antlr;
+// Generated from C:\Users\Luccas\Documents\NetBeansProjects\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\capiroto.g4 by ANTLR 4.1
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
