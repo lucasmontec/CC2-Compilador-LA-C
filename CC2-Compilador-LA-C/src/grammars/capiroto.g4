@@ -9,6 +9,48 @@ grammar capiroto;
 helloworld:
               'helloworld';
 
+programa:
+        declaracoes 'algoritmo' corpo fim_algoritmo;
+
+declaracoes:
+    decl_local_global declaracoes;
+
+declaracao_local:
+    'declare' variavel | 'constante' IDENT: tipo_basico '=' valor_constante | 
+     'tipo' IDENT : tipo_basico '=' valor_constante | 'tipo' IDENT ':' tipo;
+
+variavel:
+    IDENT dimensao mais_var ':' tipo;
+
+mais_var:
+    ',' IDENT dimensao mais_var;
+
+identificador:
+    ponteiros_opcionais IDENT dimensao outros_ident;
+
+ponteiros_opcionais:
+    ^ ponteiros_opcionais;
+
+outros_ident:
+    . identificador;
+
+dimensao: '[' exp_aritmetica ']' dimensao;
+
+tipo:
+    registro | tipo_estendido;
+
+mais_ident:
+    ',' identificador mais_ident;
+
+mais_variaveis:
+    variavel mais_variaveis;
+
+tipo_basico:
+    'literal'| 'inteiro' | 'real' | 'logico';
+
+tipo_basico_ident:
+    tipo_basico | IDENT;
+
 selecao:
            constantes ':' comandos mais_selecao;
 
