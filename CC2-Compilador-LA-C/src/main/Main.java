@@ -6,11 +6,11 @@
 
 package main;
 
-import antlr.capirotoLexer;
-import antlr.capirotoParser;
+
+import antlr.LAGrammar1Lexer;
+import antlr.LAGrammar1Parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenStream;
 
 /**
  *  Classe principal de teste de gramática.
@@ -20,13 +20,13 @@ import org.antlr.v4.runtime.TokenStream;
 public class Main {
     public static void main(String ...args){
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_1);
+        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_2);
         //Lexer para gerar os tokens
-        capirotoLexer lexer = new capirotoLexer(inputStream);
+        LAGrammar1Lexer lexer = new LAGrammar1Lexer(inputStream);
         //Estrutura comum de stream de tokens
         CommonTokenStream stream = new CommonTokenStream(lexer);
         //Parser do programa
-        capirotoParser parser = new capirotoParser(stream);
+        LAGrammar1Parser parser = new LAGrammar1Parser(stream);
         
         //Chama o token inicial
         parser.programa();

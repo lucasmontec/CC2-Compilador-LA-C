@@ -1,0 +1,20 @@
+algoritmo 
+declare i, termo, baseFatorial, fatorial, numeroTermos: inteiro 
+declare cosseno, angulo: real 
+leia(angulo, numeroTermos)
+cosseno <- 0
+baseFatorial <- 1 
+fatorial <- 1 
+termo <- 1 
+para i <- 1 ate numeroTermos faca 
+se i % 2 = 1 entao 
+cosseno <- cosseno + termo
+senao 
+cosseno <- cosseno - termo
+fim_se 
+fatorial <- fatorial * baseFatorial * (baseFatorial + 1) 
+baseFatorial <- baseFatorial + 2 
+termo <- pot(x, i + 1)/fatorial 
+fim_para 
+escreva("cos(", angulo, ") = ", cosseno) 
+fim_algoritmo
