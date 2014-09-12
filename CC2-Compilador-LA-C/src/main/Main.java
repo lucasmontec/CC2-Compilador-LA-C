@@ -20,7 +20,7 @@ import org.antlr.v4.runtime.TokenStream;
 public class Main {
     public static void main(String ...args){
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream("helloworld");
+        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_1);
         //Lexer para gerar os tokens
         capirotoLexer lexer = new capirotoLexer(inputStream);
         //Estrutura comum de stream de tokens
@@ -29,6 +29,7 @@ public class Main {
         capirotoParser parser = new capirotoParser(stream);
         
         //Chama o token inicial
-        System.out.println(parser.helloworld().toStringTree());
+        parser.programa();
+        //System.out.println(parser.programa().toStringTree());
     }
 }
