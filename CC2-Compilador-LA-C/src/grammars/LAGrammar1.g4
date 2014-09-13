@@ -1,5 +1,6 @@
 grammar LAGrammar1;
 
+
 /*Code*/
 @header {
   import Semantic.TokenSymbol;
