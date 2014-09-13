@@ -204,24 +204,31 @@ cmd:
    |   SE expressao ENTAO comandos senao_opcional FIMSE
    |   CASO exp_aritmetica SEJA selecao senao_opcional FIMCASO
        
-   |   PARA IDENT /*TODO precisa checar se esta declarado*/
+   |   PARA IDENT
+       /*Verifica se o token esta declarado*/
+       {
+        if(!isTokenPresent($IDENT.text))
+            error("Contador de loop nao declarado: "+$IDENT.text,$IDENT.getLine());
+       }
        ARROW exp_aritmetica ATE exp_aritmetica FACA comandos FIMPARA
        
    |   ENQUANTO expressao FACA comandos FIMENQUANTO
    |   FACA comandos ATE expressao
        
    |   UP_HAT IDENT outros_ident dimensao ARROW expressao /*Atrib de ponteiro*/
-       /*Verifica se o token esta declarado e se os tipos batem*/
+       /*Verifica se o token esta declarado*/
        {
         if(!isTokenPresent($IDENT.text))
             error("Ponteiro nao declarado: "+$IDENT.text,$IDENT.getLine());
        }
-   |   IDENT chamada_atribuicao
+   |   IDENT chamada /*Chamada de funcao regra 30b*/
        /*Verifica se o token esta declarado e se os tipos batem*/
        {
         if(!isTokenPresent($IDENT.text))
-            error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
+            error("Identificador nao declarado: "+$IDENT.text,$IDENT.getLine());
        }
+       
+   |   atribuicao /*Atribuicao regra 30a*/
        
    |   RETORNE expressao
        { if(!top().getScope().equals("FUNC"))
@@ -237,9 +244,29 @@ mais_expressao:
 senao_opcional:
        (SENAO comandos)?;
 
-/*30. Atribuicao*/
-chamada_atribuicao:
-       LPARENTHESIS argumentos_opcional RPARENTHESIS | outros_ident dimensao ARROW expressao;
+/*30. Atribuicao ou chamada de funcao - Depreciada*/
+/*chamada_atribuicao:
+       LPARENTHESIS argumentos_opcional RPARENTHESIS | outros_ident dimensao ARROW expressao;*/
+
+/*30a. Atribuicao*/
+atribuicao:
+           IDENT outros_ident dimensao ARROW expressao
+           {
+                if(!isTokenPresent($IDENT.text)){
+                    error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
+                }else{
+                    if(!tokenType($IDENT.text).equals($expressao.val))
+                        error("Atribuicao invalida: "+$IDENT.text+" do tipo "+
+                        tokenType($IDENT.text)+" nao pode receber a expressao"+
+                        " do tipo "+$expressao.val
+                        ,$IDENT.getLine());
+                }
+            }
+          ;
+/*30b. Chamada de funcao*/
+chamada:
+       LPARENTHESIS argumentos_opcional RPARENTHESIS
+       ;
 
 /*31. Lista de argumentos opcional com expressao*/
 argumentos_opcional:
@@ -338,30 +365,105 @@ op_relacional:
                  EQUALS | '<>' | '>=' | '<=' | '>' | '<';
 
 /*54.*/
-expressao:
-             termo_logico outros_termos_logicos;
+expressao
+    /*Val eh o tipo*/
+    returns [ String val ]
+    @init{ $val = "tipo_invalido"; }
+    :
+             termo_logico outros_termos_logicos
+            {
+                    if($outros_termos_logicos.val != null){
+                       if($termo_logico.val.equals($outros_termos_logicos.val)){
+                           $val = $termo_logico.val;
+                       }/*else deixa ser invalido*/
+                    }else{
+                          $val = $termo_logico.val;
+                    }
+                }
+    ;
 
 /*55.*/
 op_nao:
-          ('nao')?;
+          NOT?;
 
 /*56.*/
-termo_logico:
-                fator_logico outros_fatores_logicos;
+termo_logico
+    /*Val eh o tipo*/
+    returns [ String val ]
+    @init{ $val = "tipo_invalido"; }
+    :
+                fator_logico outros_fatores_logicos
+                {
+                    if($outros_fatores_logicos.val != null){
+                       if($fator_logico.val.equals($outros_fatores_logicos.val)){
+                           $val = $fator_logico.val;
+                       }/*else deixa ser invalido*/
+                    }else{
+                          $val = $fator_logico.val;
+                    }
+                }
+    ;
 
 /*57.*/
-outros_termos_logicos:
-                         ('ou' termo_logico)*;
+outros_termos_logicos
+    /*Val eh o tipo*/
+    returns [ String val ]
+    @init{ $val = null;
+          List<String> tipos = new ArrayList<>(); }
+    :
+       (OR termo_logico { tipos.add($termo_logico.val); })*
+       {
+            if(tipos.size() > 0){
+                String aux = tipos.get(0);
+                for(String tipo : tipos){
+                   if(!aux.equals(tipo)){
+                    aux = "tipo_invalido";
+                    break;
+                   }
+                }
+                $val = aux;
+            }
+         }
+    ;
 
 /*58.*/
-outros_fatores_logicos:
-                          ('e' fator_logico)*;
+outros_fatores_logicos
+    /*Val eh o tipo*/
+    returns [ String val ]
+    @init{ $val = null;
+          List<String> tipos = new ArrayList<>(); }
+    :
+        (AND fator_logico { tipos.add($fator_logico.val); } )*
+        {
+            if(tipos.size() > 0){
+                String aux = tipos.get(0);
+                for(String tipo : tipos){
+                   if(!aux.equals(tipo)){
+                    aux = "tipo_invalido";
+                    break;
+                   }
+                }
+                $val = aux;
+            }
+         }
+    ;
 
 /*59.*/
-fator_logico: op_nao parcela_logica;
+fator_logico
+    /*Val eh o tipo*/
+    returns [ String val ]
+    @init{ $val = "tipo_invalido"; }
+    : op_nao parcela_logica { $val = $parcela_logica.val; };
 
 /*60.*/
-parcela_logica: (VERDADEIRO | FALSO) | exp_relacional;
+parcela_logica
+    returns [ String val ]
+    @init{ $val = "tipo_invalido"; }
+    : (
+        VERDADEIRO { $val = "logico"; }
+      | FALSO { $val = "logico"; }
+      ) 
+      | exp_relacional { $val = "todo"; };
 
 /*LEX*/
 

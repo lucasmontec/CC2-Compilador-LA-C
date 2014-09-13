@@ -243,6 +243,19 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterAtribuicao(@NotNull LAGrammar1Parser.AtribuicaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitAtribuicao(@NotNull LAGrammar1Parser.AtribuicaoContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterDeclaracao_local(@NotNull LAGrammar1Parser.Declaracao_localContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -250,6 +263,19 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitDeclaracao_local(@NotNull LAGrammar1Parser.Declaracao_localContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterChamada(@NotNull LAGrammar1Parser.ChamadaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitChamada(@NotNull LAGrammar1Parser.ChamadaContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -744,19 +770,6 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitArgumentos_opcional(@NotNull LAGrammar1Parser.Argumentos_opcionalContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterChamada_atribuicao(@NotNull LAGrammar1Parser.Chamada_atribuicaoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitChamada_atribuicao(@NotNull LAGrammar1Parser.Chamada_atribuicaoContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

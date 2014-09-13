@@ -47,6 +47,15 @@ public class SemanticUtil {
         return false;
     }
 
+    public static String tokenType(String token){
+        for (TokenSymbolTable ts : stack) {
+            String t = ts.tokenType(token);
+            if(t != null)
+                return t;
+        }
+        return "tipo_invalido";
+    }
+    
     public static TokenSymbolTable pop() {
         return stack.pop();
     }

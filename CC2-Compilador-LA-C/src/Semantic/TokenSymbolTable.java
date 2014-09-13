@@ -6,39 +6,40 @@
 
 package Semantic;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- *
+ * Map token->type
  * @author Lucas
  */
 public class TokenSymbolTable {
     
-    private final ArrayList<TokenSymbol> table;
+    private final HashMap<String, String> table;
     private final String scope;
     
     public TokenSymbolTable(String scope){
-        table = new ArrayList<>();
+        table = new HashMap<>();
         this.scope = scope;
     }
     
     public void addToken(String nome, String tipo){
-        table.add(new TokenSymbol(nome, tipo));
+        table.put(nome,tipo);
     }
     
     public void addTokens(List<String> nomes, String tipo){
         for(String s : nomes){
-            table.add(new TokenSymbol(s, tipo));
+            table.put(s,tipo);
         }
     }
     
+    public String tokenType(String token){
+        return table.get(token);
+    }
+    
     public boolean isTokenPresent(String lex){
-        for(TokenSymbol ts : table){
-            if(ts.name.equals(lex))
-                return true;
-        }
-        return false;
+        return table.containsKey(lex);
     }
     
     public String getScope(){
@@ -48,8 +49,8 @@ public class TokenSymbolTable {
     @Override
     public String toString() {
         String ret = "Scope["+scope+"]";
-        for(TokenSymbol ts : table) {
-            ret += "\n "+ts;
+        for(Map.Entry<String, String> ts : table.entrySet()) {
+            ret += "\n "+ts.getKey()+"("+ts.getValue()+")";
         }
         return ret;
     }

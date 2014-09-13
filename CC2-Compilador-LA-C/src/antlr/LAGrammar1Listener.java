@@ -201,6 +201,17 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	void exitCorpo(@NotNull LAGrammar1Parser.CorpoContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link LAGrammar1Parser#atribuicao}.
+	 * @param ctx the parse tree
+	 */
+	void enterAtribuicao(@NotNull LAGrammar1Parser.AtribuicaoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LAGrammar1Parser#atribuicao}.
+	 * @param ctx the parse tree
+	 */
+	void exitAtribuicao(@NotNull LAGrammar1Parser.AtribuicaoContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#declaracao_local}.
 	 * @param ctx the parse tree
 	 */
@@ -210,6 +221,17 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaracao_local(@NotNull LAGrammar1Parser.Declaracao_localContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link LAGrammar1Parser#chamada}.
+	 * @param ctx the parse tree
+	 */
+	void enterChamada(@NotNull LAGrammar1Parser.ChamadaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LAGrammar1Parser#chamada}.
+	 * @param ctx the parse tree
+	 */
+	void exitChamada(@NotNull LAGrammar1Parser.ChamadaContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#exp_relacional}.
@@ -628,17 +650,6 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArgumentos_opcional(@NotNull LAGrammar1Parser.Argumentos_opcionalContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link LAGrammar1Parser#chamada_atribuicao}.
-	 * @param ctx the parse tree
-	 */
-	void enterChamada_atribuicao(@NotNull LAGrammar1Parser.Chamada_atribuicaoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LAGrammar1Parser#chamada_atribuicao}.
-	 * @param ctx the parse tree
-	 */
-	void exitChamada_atribuicao(@NotNull LAGrammar1Parser.Chamada_atribuicaoContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#identificador}.
