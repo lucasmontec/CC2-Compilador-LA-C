@@ -1,10 +1,27 @@
 grammar LAGrammar1;
 
+/*Code*/
+@header {
+  import Semantic.TokenSymbol;
+  import Semantic.TokenSymbolTable;
+  import static Semantic.SemanticUtil.*;
+}
+
 /*SYNTAX*/
 
 /*1. Programa LA*/
 programa:
-        declaracoes ALGORITMO corpo FIM_ALGORITMO;
+            { push(new TokenSymbolTable("decl_globais")); }
+        declaracoes ALGORITMO corpo
+            { printSemanticTable(); }
+            FIM_ALGORITMO
+            {
+             if(hasErrors())
+                printErrors();
+             pop();/*Decl globais*/
+             }
+        ;
+        
 
 /*2. Lista de declarações do programa*/
 declaracoes:
@@ -17,71 +34,141 @@ decl_local_global:
 /*4. Regra de declaração local*/
 declaracao_local:
     DECLARE variavel
+    {
+     top().addTokens($variavel.names,$variavel.t);
+    }
     | CONSTANTE IDENT COLON tipo_basico EQUALS valor_constante 
     | TIPO IDENT COLON tipo_basico EQUALS valor_constante
     | TIPO IDENT COLON tipo;
 
 /*5. Lista de variaveis com variaveis a mais do mesmo tipo opcionais*/
-variavel:
-    IDENT dimensao mais_var COLON tipo;
+variavel
+    returns [ List<String> names, String t ]
+    @init{ $names = new ArrayList<>(); $t = ""; }
+    :
+    IDENT dimensao mais_var COLON tipo
+            {
+             $t = $tipo.val;
+             $names.add($IDENT.text);
+             $names.addAll($mais_var.nomes);
+             } /*adicionar tipo*/
+        ;
 
 /*6. Extensão da lista de variáveis*/
-mais_var:
-    (COMMA IDENT dimensao)*;
+mais_var returns [ List<String> nomes ]
+    @init { $nomes = new ArrayList<String>(); }
+    :
+    (COMMA IDENT { $nomes.add($IDENT.text); } dimensao)*;
 
 /*7. Listagem de identificadores*/
-identificador:
-    ponteiros_opcionais IDENT dimensao outros_ident;
+identificador
+    returns [ String nome ]
+    @init{ $nome = ""; }
+    :
+    ponteiros_opcionais IDENT 
+    { $nome = $ponteiros_opcionais.val + $IDENT.text; } 
+    dimensao outros_ident;
 
 /*8. Listagem de ponteiros não obrigatória*/
-ponteiros_opcionais:
-    (UP_HAT ponteiros_opcionais)?;
+ponteiros_opcionais
+    returns [ String val ]
+    @init{ $val = ""; }
+    : (UP_HAT { $val += $UP_HAT.text; } )*;
 
 /*9.*/
-outros_ident:
-    (DOT identificador)?;
+outros_ident
+    /*Last name é o nome do ultimo identificador*/
+    returns [ String lastName ]
+    @init{ $lastName = ""; }
+    :
+     /*Retorna cada nome. O ultimo é o tipo da lista de chamadas.*/
+    (DOT identificador { $lastName=$identificador.nome; })?;
 
 /*10. Dimensão de listas*/
 dimensao: (LBRACKET exp_aritmetica RBRACKET)*;
 
 /*11.*/
-tipo:
-    registro | tipo_estendido;
+tipo
+    returns [ String val ]
+    @init{ $val = ""; }
+    :
+    registro {
+              $val=$registro.val;
+              /*match de string da definicao de registro*/
+              } |
+    tipo_estendido { $val=$tipo_estendido.val; };
 
 /*12. Lista de identificadores*/
 mais_ident:
     (COMMA identificador)*;
 
 /*13. Lista de pelomenos uma variável*/
-mais_variaveis:
-    variavel*;
+mais_variaveis
+    returns [ List<String> tipos ]
+    @init{ $tipos = new ArrayList<>(); }
+    :
+    (variavel {$tipos.add($variavel.t);} )*;
 
 /*14. Tipos de elementos básicos*/
-tipo_basico:
-    LITERAL| INTEIRO | REAL | LOGICO;
+tipo_basico
+    returns [ String val ]
+    @init{ $val = ""; }
+    :
+    /*Retorna o token como texto para ser o tipo*/
+    LITERAL{ $val=$LITERAL.text; }|
+    INTEIRO{ $val=$INTEIRO.text; } |
+    REAL{ $val=$REAL.text; } |
+    LOGICO{ $val=$LOGICO.text; };
 
 /*15. Tipo basico ou identificador*/
-tipo_basico_ident:
-    tipo_basico | IDENT;
+tipo_basico_ident
+    returns [ String val ]
+    @init{ $val = ""; }
+    :
+    /*Retorna um dos tipos basicos*/
+    tipo_basico { $val=$tipo_basico.val; } |
+    /*Retorna o tipo como sendo o identificador de tipo*/
+    IDENT { $val=$IDENT.text; };
 
 /*16. */
-/*tipo_estendido:
-    ponteiro_opcional tipo_basico_ident;*/
-tipo_estendido:
-    ponteiros_opcionais tipo_basico_ident;
+tipo_estendido
+    returns [ String val ]
+    @init{ $val = ""; }
+    :
+    ponteiros_opcionais tipo_basico_ident
+    { $val= $ponteiros_opcionais.val + $tipo_basico_ident.val; };
 
 /*17. Regra de valores constantes*/
 valor_constante:
      CADEIA | NUM_INT | NUM_REAL | VERDADEIRO | FALSO;
 
 /*18. Registros - Struct*/
-registro:
-     REGISTRO variavel mais_variaveis FIM_REGISTRO;
+registro
+    returns [ String val ]
+    @init{ $val = "reg"; }
+    :
+     REGISTRO variavel { $val += "["+$variavel.t; } 
+     mais_variaveis { 
+                     for(String s : $mais_variaveis.tipos){
+                        $val += ","+s;                                    
+                     }
+                    }
+     FIM_REGISTRO
+     { $val += "]"; }
+    ;
 
 /*19. Procedimentos globais*/
 declaracao_global:
-      PROCEDIMENTO IDENT LPARENTHESIS parametros_opcional RPARENTHESIS declaracoes_locais comandos FIM_PROCEDIMENTO
-      | FUNCAO IDENT LPARENTHESIS parametros_opcional RPARENTHESIS COLON tipo_estendido declaracoes_locais comandos FIM_FUNCAO;
+      PROCEDIMENTO IDENT 
+        { push(new TokenSymbolTable("PROC")); }
+        LPARENTHESIS parametros_opcional RPARENTHESIS declaracoes_locais comandos FIM_PROCEDIMENTO
+        { pop(); top().addToken($IDENT.text, "PROC"); }
+      
+      | FUNCAO IDENT
+        { push(new TokenSymbolTable("FUNC")); }
+        LPARENTHESIS parametros_opcional RPARENTHESIS COLON tipo_estendido declaracoes_locais comandos FIM_FUNCAO
+        { pop(); top().addToken($IDENT.text, "FUNC"); }           
+      ;
 
 /*20. Parametros 0 ou mais*/
 parametros_opcional: parametro?;
@@ -112,14 +199,34 @@ comandos:
 cmd:
        LEIA LPARENTHESIS identificador mais_ident RPARENTHESIS
    |   ESCREVA LPARENTHESIS expressao mais_expressao RPARENTHESIS
+       
    |   SE expressao ENTAO comandos senao_opcional FIMSE
    |   CASO exp_aritmetica SEJA selecao senao_opcional FIMCASO
-   |   PARA IDENT ARROW exp_aritmetica ATE exp_aritmetica FACA comandos FIMPARA
+       
+   |   PARA IDENT /*TODO precisa checar se esta declarado*/
+       ARROW exp_aritmetica ATE exp_aritmetica FACA comandos FIMPARA
+       
    |   ENQUANTO expressao FACA comandos FIMENQUANTO
    |   FACA comandos ATE expressao
-   |   UP_HAT IDENT outros_ident dimensao ARROW expressao
+       
+   |   UP_HAT IDENT outros_ident dimensao ARROW expressao /*Atrib de ponteiro*/
+       /*Verifica se o token esta declarado e se os tipos batem*/
+       {
+        if(!isTokenPresent($IDENT.text))
+            error("Ponteiro nao declarado: "+$IDENT.text,$IDENT.getLine());
+       }
    |   IDENT chamada_atribuicao
-   |   RETORNE expressao;
+       /*Verifica se o token esta declarado e se os tipos batem*/
+       {
+        if(!isTokenPresent($IDENT.text))
+            error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
+       }
+       
+   |   RETORNE expressao
+       { if(!top().getScope().equals("FUNC"))
+            error("retorne em local inadequado.",$RETORNE.getLine());
+       }
+   ;
      
 /*28. Repetição de expressão para listagem de expressões*/
 mais_expressao:
@@ -339,5 +446,5 @@ NUM_REAL: ['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+'.'['0'|'1'|'2'|'3'|'4'|'5'|
 /*Sequencia de letras, digitos, _, começando por letra ou _*/
 IDENT: NameStartChar NameChar*; 
 
-COMMENT : '{' .*? '}' -> skip;
-WSNL : [ \r\t\n]+ -> skip ;
+COMMENT : '{' .*? '}' -> channel(HIDDEN);
+WSNL : [ \r\t\n]+ -> channel(HIDDEN) ;

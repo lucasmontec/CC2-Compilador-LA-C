@@ -14,8 +14,22 @@ import java.util.Stack;
  */
 public class SemanticUtil {
 
-    private static final Stack<TokenSymbolTable> stack = new Stack<>();
+    private static Stack<TokenSymbolTable> stack = new Stack<>();
+    private static Stack<SemanticError> errors = new Stack<>();
 
+    public static void reset(){
+        stack = new Stack<>();
+        errors = new Stack<>();
+    }
+    
+    public static boolean hasErrors(){
+        return !errors.empty();
+    }
+    
+    public static void error(String description, int line){
+        errors.push(new SemanticError(description, line));
+    }
+    
     public static void push(TokenSymbolTable table) {
         stack.push(table);
     }
@@ -41,12 +55,20 @@ public class SemanticUtil {
         return stack;
     }
 
-    public static String print() {
+    public static void printSemanticTable() {
         String body = "";
         for (TokenSymbolTable ts : stack) {
             body += ts;
         }
-        return "SemanticUtil{\n" +body+ "\n}";
+        System.out.println("SemanticTable{\n" +body+ "\n}");
+    }
+    
+    public static void printErrors(){
+        String body = "";
+        for (SemanticError ts : errors) {
+            body += ts+"\n";
+        }
+        System.out.println("Errors{\n" +body+ "\n}");
     }
 
 }

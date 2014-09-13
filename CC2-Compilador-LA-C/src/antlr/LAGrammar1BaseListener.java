@@ -1,6 +1,11 @@
 // Generated from C:\Users\Lucas\git\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1.g4 by ANTLR 4.1
 package antlr;
 
+  import Semantic.TokenSymbol;
+  import Semantic.TokenSymbolTable;
+  import static Semantic.SemanticUtil.*;
+
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;

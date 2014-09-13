@@ -1,5 +1,10 @@
 // Generated from C:\Users\Lucas\git\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1.g4 by ANTLR 4.1
 package antlr;
+
+  import Semantic.TokenSymbol;
+  import Semantic.TokenSymbolTable;
+  import static Semantic.SemanticUtil.*;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -85,12 +90,12 @@ public class LAGrammar1Lexer extends Lexer {
 	}
 	private void WSNL_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
-		case 1: skip();  break;
+		case 1: _channel = HIDDEN;  break;
 		}
 	}
 	private void COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
-		case 0: skip();  break;
+		case 0: _channel = HIDDEN;  break;
 		}
 	}
 

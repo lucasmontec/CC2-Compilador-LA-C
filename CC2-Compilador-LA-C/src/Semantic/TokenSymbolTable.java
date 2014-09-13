@@ -41,6 +41,10 @@ public class TokenSymbolTable {
         return false;
     }
     
+    public String getScope(){
+        return scope;
+    }
+    
     @Override
     public String toString() {
         String ret = "Scope["+scope+"]";

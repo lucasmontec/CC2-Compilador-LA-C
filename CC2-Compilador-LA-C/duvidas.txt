@@ -1,0 +1,2 @@
+Atriguição do tipo var <- procedimento ?
+Quais escopos são permitidos para o retorne?

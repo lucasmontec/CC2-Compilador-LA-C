@@ -18,9 +18,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
  * @author joaovitor & Lucas M Carvalhaes
  */
 public class Main {
-    public static void main(String ...args){
+    /*public static void main(String ...args){
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_2);
+        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_1_erro_semantico);
         //Lexer para gerar os tokens
         LAGrammar1Lexer lexer = new LAGrammar1Lexer(inputStream);
         //Estrutura comum de stream de tokens
@@ -31,5 +31,5 @@ public class Main {
         //Chama o token inicial
         parser.programa();
         //System.out.println(parser.programa().toStringTree());
-    }
+    }*/
 }
