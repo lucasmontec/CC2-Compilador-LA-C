@@ -64,7 +64,7 @@ variavel
              }else{
                 error("Identificador nao declarado"+ $IDENT.text, $IDENT.getLine());
              }
-             /*FIM-LUCCAS*/             
+          /*FIM-LUCCAS*/             
          };
 
 /*6. Extensão da lista de variáveis*/
