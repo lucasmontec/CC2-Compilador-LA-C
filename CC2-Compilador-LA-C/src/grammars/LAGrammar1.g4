@@ -24,15 +24,15 @@ programa:
         ;
         
 
-/*2. Lista de declarações do programa*/
+/*2. Lista de declaraï¿½ï¿½es do programa*/
 declaracoes:
     decl_local_global*;
 
-/*3. Junção de declaração local ou global*/
+/*3. Junï¿½ï¿½o de declaraï¿½ï¿½o local ou global*/
 decl_local_global:
             declaracao_local | declaracao_global;         
 
-/*4. Regra de declaração local*/
+/*4. Regra de declaraï¿½ï¿½o local*/
 declaracao_local:
     DECLARE variavel
     {
@@ -55,7 +55,7 @@ variavel
              } /*adicionar tipo*/
         ;
 
-/*6. Extensão da lista de variáveis*/
+/*6. Extensï¿½o da lista de variï¿½veis*/
 mais_var returns [ List<String> nomes ]
     @init { $nomes = new ArrayList<String>(); }
     :
@@ -70,7 +70,7 @@ identificador
     { $nome = $ponteiros_opcionais.val + $IDENT.text; } 
     dimensao outros_ident;
 
-/*8. Listagem de ponteiros não obrigatória*/
+/*8. Listagem de ponteiros nï¿½o obrigatï¿½ria*/
 ponteiros_opcionais
     returns [ String val ]
     @init{ $val = ""; }
@@ -78,14 +78,14 @@ ponteiros_opcionais
 
 /*9.*/
 outros_ident
-    /*Last name é o nome do ultimo identificador*/
+    /*Last name ï¿½ o nome do ultimo identificador*/
     returns [ String lastName ]
     @init{ $lastName = ""; }
     :
-     /*Retorna cada nome. O ultimo é o tipo da lista de chamadas.*/
+     /*Retorna cada nome. O ultimo ï¿½ o tipo da lista de chamadas.*/
     (DOT identificador { $lastName=$identificador.nome; })?;
 
-/*10. Dimensão de listas*/
+/*10. Dimensï¿½o de listas*/
 dimensao: (LBRACKET exp_aritmetica RBRACKET)*;
 
 /*11.*/
@@ -103,14 +103,14 @@ tipo
 mais_ident:
     (COMMA identificador)*;
 
-/*13. Lista de pelomenos uma variável*/
+/*13. Lista de pelomenos uma variï¿½vel*/
 mais_variaveis
     returns [ List<String> tipos ]
     @init{ $tipos = new ArrayList<>(); }
     :
     (variavel {$tipos.add($variavel.t);} )*;
 
-/*14. Tipos de elementos básicos*/
+/*14. Tipos de elementos bï¿½sicos*/
 tipo_basico
     returns [ String val ]
     @init{ $val = ""; }
@@ -236,7 +236,7 @@ cmd:
        }
    ;
      
-/*28. Repetição de expressão para listagem de expressões*/
+/*28. Repetiï¿½ï¿½o de expressï¿½o para listagem de expressï¿½es*/
 mais_expressao:
     (COMMA expressao)*;
 
@@ -296,13 +296,40 @@ numero_intervalo:
 intervalo_opcional:
                       (TWODOTS op_unario NUM_INT)?;
 
-/*38. Op unário unico de negativo*/
-op_unario:
-             MINUS?;
+/*38. Op unï¿½rio unico de negativo*/
+op_unario
+    returns [boolean b]
+    @init{$b = false;}:
+             (MINUS{$b = true})?;
 
 /*39.*/
-exp_aritmetica:
-                  termo outros_termos;
+exp_aritmetica
+    returns [String val]
+    @init {$val = "";}:
+                  termo  outros_termos
+                {
+                /*Combinacao com outros fatores em op adicao*/
+                if($outros_termos.val.length() > 0){
+                     if($outros_termos.val.equals("tipo_invalido"))
+                      $val = "tipo_invalido";/*sobe tipo invalido direto*/
+                     else {
+                        /*Se o tipo de outros fatores e valido
+                        entao vemos o tipo de fator*/
+                        if($termo.val.equals("inteiro") ||
+                           $termo.val.equals("real")
+                        ){
+                            if($outros_termos.val.equals("real"))
+                             $val = "real";/*Caso real, real prevalece*/
+                            else
+                             $val = $termo.val; /*caso inteiro, tipo de fator prevalece*/
+                        }else
+                            $val = "tipo_invalido";
+                     }
+                }else{/*Apenas fator esta presente*/
+                    $val = $termo.val;                                
+                }
+             }
+                      ;
 
 /*40.*/
 op_multiplicacao:
@@ -313,39 +340,130 @@ op_adicao:
              PLUS | MINUS;
 
 /*42.*/
-termo:
-         fator outros_fatores;
+termo
+    returns [String val]
+    @init {$val = "";}
+    :
+         fator outros_fatores
+         {
+          
+            /*Combinacao com outros fatores em op mult*/
+            if($outros_fatores.val.length() > 0){
+                 if($outros_fatores.val.equals("tipo_invalido"))
+                  $val = "tipo_invalido";/*sobe tipo invalido direto*/
+                 else {
+                    /*Se o tipo de outros fatores e valido
+                    entao vemos o tipo de fator*/
+                    if($fator.val.equals("inteiro") ||
+                       $fator.val.equals("real")
+                    ){
+                        if($outros_fatores.val.equals("real"))
+                         $val = "real";/*Caso real, real prevalece*/
+                        else
+                         $val = $fator.val; /*caso inteiro, tipo de fator prevalece*/
+                    }else
+                        $val = "tipo_invalido";
+                 }
+            }else{/*Apenas fator esta presente*/
+                $val = $fator.val;                                
+            }
+         }
+         ;
 
 /*43.*/
-outros_termos:
-                 (op_adicao termo)*;
+outros_termos
+    returns [String val]
+    @init {$val = "";}
+    :
+                 (op_adicao termo
+                  {
+                   if($termo.val.equals("inteiro")
+                   || $termo.val.equals("real"))
+                    $val = $termo.val;
+                   else
+                    $val = "tipo_invalido";
+                   }
+                 )*;
 
 /*44.*/
-fator:
-         parcela outras_parcelas;
+fator
+    returns [String val]
+    @init {$val = "";}:
+         parcela outras_parcelas
+         {
+            if($outras_parcelas.val.length() > 0)
+                if($outras_parcelas.val.equals("tipo_invalido")
+                    $val = "tipo_invalido";
+                else if($parcela.val.equals("inteiro")
+                    $val = "inteiro";
+            else
+                $val = $parcela.val;
+                    
+         };
 
 /*45.*/
-outros_fatores:
-                  (op_multiplicacao fator)*;
+outros_fatores
+    returns [String val]
+    @init {$val = "";}
+    :
+                  (op_multiplicacao fator
+                  {
+                   if($fator.val.equals("inteiro")
+                   || $fator.val.equals("real"))
+                    $val = $fator.val;
+                   else
+                    $val = "tipo_invalido";
+                   })*;
 
 /*46.*/
-parcela:
-           op_unario parcela_unario | parcela_nao_unario;
+parcela
+    returns [String val]
+    @init {$val = "";}:
+           op_unario parcela_unario
+           {
+                if($op_unario.b)
+                    if(tokenType($parcela_unario.val) != "real" && tokenType($parcela_unario.val) != inteiro)
+                        $val = "tipo_invalido";
+                    else
+                        $val = tokenType($parcela_unario.val);
+                else
+                    $val = tokenType($parcela_unario.val);
+           }
+           | parcela_nao_unario {$val = $parcela_nao_unario.val;};
 
 /*47.*/
-parcela_unario:
-                 (NUM_INT | NUM_REAL)
-                 | UP_HAT IDENT outros_ident dimensao
-                 | IDENT chamada_partes
-                 | LPARENTHESIS expressao RPARENTHESIS;
+parcela_unario
+    returns [String val]
+    @init {$val = "";}:
+                 (NUM_INT {$val = "inteiro";}
+                 | NUM_REAL {$val = "real";})
+                 | UP_HAT IDENT {$val = tokenType($IDENT.text);} 
+                 outros_ident 
+                    { if($outros_ident.lastName.lenght() > 0)
+                                    $val = tokenType($outros_ident.lastName);
+                    }
+                 dimensao
+                 | IDENT chamada_partes {$val = tokenType($IDENT.text);} 
+                 | LPARENTHESIS expressao {$val = $expressao.val;} RPARENTHESIS;
 
 /*48.*/
-parcela_nao_unario:
-                      '&' IDENT outros_ident dimensao | CADEIA;
+parcela_nao_unario
+    returns [String val]
+    @init {$val = "";}:
+                      '&' IDENT outros_ident {$val = "endereco";}
+                      dimensao | CADEIA {$val = "cadeia";};
 
-/*49.*/
-outras_parcelas:
-                   ('%' parcela)*;
+/*49. TODO: Descobrir o que o operador % faz*/
+outras_parcelas
+    returns [String val]
+    @init {$val = "";}:
+                   ('%' parcela 
+                        {
+                         if(tokenType($parcela.val).equals("inteiro"))
+                            $val = parcela.val;
+                         else
+                            $val = "tipo_invalido";
+                        })*;
 
 /*50. TODO: add epsilon*/
 chamada_partes:
@@ -353,12 +471,21 @@ chamada_partes:
                  | outros_ident dimensao;
 
 /*51.*/
-exp_relacional:
-                  exp_aritmetica op_opcional;
+exp_relacional
+    returns [String val]
+    @init{ $val = "tipo_invalido"; }
+    :
+                  exp_aritmetica {$val = $exp_aritmetica.val;} 
+                  op_opcional{if($op_opcional.b)
+                                $val = "logico";}
+    ;
 
 /*52.*/
-op_opcional:
-                 (op_relacional exp_aritmetica)?;
+op_opcional
+    returns [boolean b]
+    @init{ b = false}:
+               
+                 (op_relacional exp_aritmetica {b = true;})?;
 
 /*53. Operadores relacionais*/
 op_relacional:
@@ -463,7 +590,7 @@ parcela_logica
         VERDADEIRO { $val = "logico"; }
       | FALSO { $val = "logico"; }
       ) 
-      | exp_relacional { $val = "todo"; };
+      | exp_relacional { $val = $exp_relacional.val; };
 
 /*LEX*/
 
@@ -546,7 +673,7 @@ CADEIA: '"' (~[\r\n"] | '""')* '"' ;
 NUM_INT: ['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+; 
 /*Numero real com pelomenos um digito antes do ponto*/
 NUM_REAL: ['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+'.'['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+; 
-/*Sequencia de letras, digitos, _, começando por letra ou _*/
+/*Sequencia de letras, digitos, _, comeï¿½ando por letra ou _*/
 IDENT: NameStartChar NameChar*; 
 
 COMMENT : '{' .*? '}' -> channel(HIDDEN);
