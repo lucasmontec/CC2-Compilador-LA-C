@@ -5,6 +5,7 @@
  */
 package Semantic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -60,8 +61,8 @@ public class SemanticUtil {
         return stack.pop();
     }
 
-    public static List allTables() {
-        return stack;
+    public static ArrayList<TokenSymbolTable> allTables() {
+        return new ArrayList<>(stack);
     }
 
     public static void printSemanticTable() {

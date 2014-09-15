@@ -35,36 +35,45 @@ decl_local_global:
 /*4. Regra de declara��o local*/
 declaracao_local:
     DECLARE variavel
-    {/*LUCCAS*/
-     if($variavel.t.equals("literal") 
-     || $variavel.t.equals("inteiro") 
-     || $variavel.t.equals("real") 
-     || $variavel.t.equals("logico") ){
-                                 
-        top().addTokens($variavel.names,$variavel.t);
-     }else if(isTokenPresent($variavel.t)){ /*verificar se eh do tipo custom*/
-        top().addTokens($variavel.names,$variavel.t);
-     }
-    }/*FIM-LUCCAS*/
     {
-     for (String s : $variavel.names){
-      if(top().isTokenPresent(s))
-        error("Identificar ja declarado: "+s, $DECLARE.getLine());
-      else
-        top().addToken(s, $variavel.t);
-     }     
-     /*top().addTokens($variavel.names,$variavel.t);*/
+        if($variavel.t.trim().replace("^","").equals("literal") 
+        || $variavel.t.trim().replace("^","").equals("inteiro") 
+        || $variavel.t.trim().replace("^","").equals("real") 
+        || $variavel.t.trim().replace("^","").equals("logico") ){
+               /*Check each token names to see if it was already declared */
+               for (String s : $variavel.names){
+               if(top().isTokenPresent(s))
+                   error("Identificador ja declarado: "+s, $DECLARE.getLine());
+                 else
+                   top().addToken(s, $variavel.t);
+               }
+        }else if(isTokenPresent($variavel.t)){ /*verificar se eh do tipo custom*/
+           /*Check each token names to see if it was already declared */
+           for (String s : $variavel.names){
+               if(top().isTokenPresent(s))
+                   error("Identificador ja declarado: "+s, $DECLARE.getLine());
+                 else
+                   top().addToken(s, $variavel.t);
+           }  
+        }else{
+           error("Undeclared variable type: "+$variavel.t, $DECLARE.getLine()); 
+        }
     }
     | CONSTANTE IDENT COLON tipo_basico EQUALS valor_constante 
      {
-      if(top().isTokenPresent($IDENT.text)
+      if(!$tipo_basico.val.equals($valor_constante.val)){
+         error("Atribuicao invalida: "+$IDENT.text+
+         " tipo "+$tipo_basico.val+" com "+$valor_constante.val,
+         $IDENT.getLine());  
+      }
+      if(top().isTokenPresent($IDENT.text))
         error("Constante ja declarada: "+$IDENT.text, $IDENT.getLine());
       else
         top().addToken($IDENT.text, $tipo_basico.val);
      }      
     | TIPO IDENT COLON tipo
      {
-      if(top().isTokenPresent($IDENT.text)
+      if(top().isTokenPresent($IDENT.text))
         error("Tipo ja declarado: "+$IDENT.text, $IDENT.getLine());
       else
         top().addToken($IDENT.text, $tipo.val);
@@ -77,22 +86,25 @@ variavel
     @init{ $names = new ArrayList<>(); $t = ""; }
     :
     IDENT dimensao mais_var COLON tipo
-        {/*LUCCAS*/
-             if(isTokenPresent($IDENT.text)){
-                $t = $tipo.val;
-                $names.add($IDENT.text);
-                $names.addAll($mais_var.nomes);
-             }else{
-                error("Identificador nao declarado"+ $IDENT.text, $IDENT.getLine());
-             }
-          /*FIM-LUCCAS*/             
+        {
+            $t = $tipo.val;
+            $names.add($IDENT.text);
+            $names.addAll($mais_var.nomes);           
          };
 
 /*6. Extens�o da lista de vari�veis*/
 mais_var returns [ List<String> nomes ]
     @init { $nomes = new ArrayList<String>(); }
     :
-    (COMMA IDENT { $nomes.add($IDENT.text); } dimensao)*;
+    (COMMA IDENT { 
+                  if(!isTokenPresent($IDENT.text)){
+                      $nomes.add($IDENT.text);
+                  }else{
+                      error("Identificador ja declarado: "+
+                      $IDENT.text,$IDENT.getLine());
+                  }
+                }
+     dimensao)*;
 
 /*7. Listagem de identificadores*/
 identificador
@@ -173,8 +185,15 @@ tipo_estendido
     { $val= $ponteiros_opcionais.val + $tipo_basico_ident.val; };
 
 /*17. Regra de valores constantes*/
-valor_constante:
-     CADEIA | NUM_INT | NUM_REAL | VERDADEIRO | FALSO;
+valor_constante
+    returns [ String val ]
+    @init{ $val = ""; }
+    :
+     CADEIA { $val = "cadeia"; } |
+     NUM_INT { $val = "inteiro"; } |
+     NUM_REAL { $val = "real"; } |
+     VERDADEIRO { $val = "logico"; } |
+     FALSO { $val = "logico"; };
 
 /*18. Registros - Struct*/
 registro
@@ -188,7 +207,11 @@ registro
                      }
                     }
      FIM_REGISTRO
-     { $val += "]"; }
+     {
+      $val += "]";
+      /*Registra o tipo pra in-line*/
+      top().addToken($val,$val);
+      }
     ;
 
 /*19. Procedimentos globais*/
@@ -264,12 +287,12 @@ cmd:
    |   atribuicao /*Atribuicao regra 30a*/
        
    |   RETORNE expressao/*LUCCAS*/
-       {    bool erro = true;
+       {    boolean erro = true;
             for(TokenSymbolTable currentTable : allTables()){
               if(currentTable.getScope().equals("FUNC"))
                 erro = false;
             }
-            if(error){
+            if(erro){
               error("Retorne em local inadequado", $RETORNE.getLine());       
             }
        }/*FIM-LUCCAS*/
@@ -294,9 +317,14 @@ atribuicao:
                 if(!isTokenPresent($IDENT.text)){
                     error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
                 }else{
-                    if(!tokenType($IDENT.text).equals($expressao.val))
-                        error("Atribuicao invalida: "+$IDENT.text+" do tipo "+
-                        tokenType($IDENT.text)+" nao pode receber a expressao"+
+                    String correctToken = $IDENT.text;
+                    
+                    if($outros_ident.lastName.length() > 0)
+                        correctToken = $outros_ident.lastName;
+                    
+                    if(!tokenType(correctToken).equals($expressao.val))
+                        error("Atribuicao invalida: "+correctToken+" do tipo "+
+                        tokenType(correctToken)+" nao pode receber a expressao"+
                         " do tipo "+$expressao.val
                         ,$IDENT.getLine());
                 }
@@ -339,13 +367,13 @@ intervalo_opcional:
 op_unario
     returns [boolean b]
     @init{$b = false;}:
-             (MINUS{$b = true})?;
+             (MINUS{$b = true;})?;
 
 /*39.*/
 exp_aritmetica
     returns [String val]
     @init {$val = "";}:
-                  termo  outros_termos
+                 termo  outros_termos
                 {
                 /*Combinacao com outros fatores em op adicao*/
                 if($outros_termos.val.length() > 0){
@@ -368,7 +396,7 @@ exp_aritmetica
                     $val = $termo.val;                                
                 }
              }
-                      ;
+             ;
 
 /*40.*/
 op_multiplicacao:
@@ -430,12 +458,12 @@ fator
     @init {$val = "";}:
          parcela outras_parcelas
          {
-            if($outras_parcelas.val.length() > 0)
-                if($outras_parcelas.val.equals("tipo_invalido")
+            if($outras_parcelas.val.length() > 0){
+                if($outras_parcelas.val.equals("tipo_invalido"))
                     $val = "tipo_invalido";
-                else if($parcela.val.equals("inteiro")
+                else if($parcela.val.equals("inteiro"))
                     $val = "inteiro";
-            else
+            }else
                 $val = $parcela.val;
                     
          };
@@ -459,14 +487,15 @@ parcela
     returns [String val]
     @init {$val = "";}:
            op_unario parcela_unario
-           {
-                if($op_unario.b)
-                    if(tokenType($parcela_unario.val) != "real" && tokenType($parcela_unario.val) != inteiro)
-                        $val = "tipo_invalido";
+           {  
+                if($op_unario.b){        
+                    if($parcela_unario.val.equals("real") ||
+                        $parcela_unario.val.equals("inteiro"))
+                        $val = $parcela_unario.val;
                     else
-                        $val = tokenType($parcela_unario.val);
-                else
-                    $val = tokenType($parcela_unario.val);
+                        $val = "tipo_invalido";
+                }else
+                    $val = $parcela_unario.val;
            }
            | parcela_nao_unario {$val = $parcela_nao_unario.val;};
 
@@ -478,7 +507,7 @@ parcela_unario
                  | NUM_REAL {$val = "real";})
                  | UP_HAT IDENT {$val = tokenType($IDENT.text);} 
                  outros_ident 
-                    { if($outros_ident.lastName.lenght() > 0)
+                    { if($outros_ident.lastName.length() > 0)
                                     $val = tokenType($outros_ident.lastName);
                     }
                  dimensao
@@ -489,7 +518,14 @@ parcela_unario
 parcela_nao_unario
     returns [String val]
     @init {$val = "";}:
-                      '&' IDENT outros_ident {$val = "endereco";}
+                      '&' IDENT outros_ident
+                      {
+                       String identifier = $IDENT.text;
+                       if($outros_ident.lastName.length() > 0){
+                            identifier = $outros_ident.lastName;                        
+                       }
+                       $val = "^"+tokenType(identifier);
+                      }
                       dimensao | CADEIA {$val = "cadeia";};
 
 /*49. TODO: Descobrir o que o operador % faz*/
@@ -498,8 +534,8 @@ outras_parcelas
     @init {$val = "";}:
                    ('%' parcela 
                         {
-                         if(tokenType($parcela.val).equals("inteiro"))
-                            $val = parcela.val;
+                         if($parcela.val.equals("inteiro"))
+                            $val = $parcela.val;
                          else
                             $val = "tipo_invalido";
                         })*;
@@ -522,9 +558,8 @@ exp_relacional
 /*52.*/
 op_opcional
     returns [boolean b]
-    @init{ b = false}:
-               
-                 (op_relacional exp_aritmetica {b = true;})?;
+    @init{ $b = false; }:
+                 (op_relacional exp_aritmetica {$b = true;})?;
 
 /*53. Operadores relacionais*/
 op_relacional:
@@ -647,11 +682,11 @@ RBRACKET: ']';
 LPARENTHESIS: '(';
 RPARENTHESIS: ')';
 TWODOTS: '..';
+ARROW: '<-';
 MINUS: '-';
 PLUS: '+';
 MULT: '*';
 DIV: '/';
-ARROW: '<-'; 
 COMMERCIAL_E: '&';
 PERCENT: '%'; 
 

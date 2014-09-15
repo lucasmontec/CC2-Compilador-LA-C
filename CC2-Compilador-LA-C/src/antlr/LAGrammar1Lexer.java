@@ -22,7 +22,7 @@ public class LAGrammar1Lexer extends Lexer {
 	public static final int
 		ALGORITMO=1, FIM_ALGORITMO=2, DECLARE=3, CONSTANTE=4, COLON=5, TIPO=6, 
 		COMMA=7, UP_HAT=8, DOT=9, LBRACKET=10, RBRACKET=11, LPARENTHESIS=12, RPARENTHESIS=13, 
-		TWODOTS=14, MINUS=15, PLUS=16, MULT=17, DIV=18, ARROW=19, COMMERCIAL_E=20, 
+		TWODOTS=14, ARROW=15, MINUS=16, PLUS=17, MULT=18, DIV=19, COMMERCIAL_E=20, 
 		PERCENT=21, EQUALS=22, DIFFERENT=23, GREATERTHANEQ=24, LESSTHANEQ=25, 
 		GREATERTHAN=26, LESSTHAN=27, NOT=28, LITERAL=29, INTEIRO=30, REAL=31, 
 		LOGICO=32, OR=33, AND=34, VERDADEIRO=35, FALSO=36, REGISTRO=37, FIM_REGISTRO=38, 
@@ -37,8 +37,8 @@ public class LAGrammar1Lexer extends Lexer {
 	public static final String[] tokenNames = {
 		"<INVALID>",
 		"'algoritmo'", "'fim_algoritmo'", "'declare'", "'constante'", "':'", "'tipo'", 
-		"','", "'^'", "'.'", "'['", "']'", "'('", "')'", "'..'", "'-'", "'+'", 
-		"'*'", "'/'", "'<-'", "'&'", "'%'", "'='", "'<>'", "'>='", "'<='", "'>'", 
+		"','", "'^'", "'.'", "'['", "']'", "'('", "')'", "'..'", "'<-'", "'-'", 
+		"'+'", "'*'", "'/'", "'&'", "'%'", "'='", "'<>'", "'>='", "'<='", "'>'", 
 		"'<'", "'nao'", "'literal'", "'inteiro'", "'real'", "'logico'", "'ou'", 
 		"'e'", "'verdadeiro'", "'falso'", "'registro'", "'fim_registro'", "'procedimento'", 
 		"'fim_procedimento'", "'funcao'", "'fim_funcao'", "'var'", "'leia'", "'escreva'", 
@@ -49,7 +49,7 @@ public class LAGrammar1Lexer extends Lexer {
 	public static final String[] ruleNames = {
 		"ALGORITMO", "FIM_ALGORITMO", "DECLARE", "CONSTANTE", "COLON", "TIPO", 
 		"COMMA", "UP_HAT", "DOT", "LBRACKET", "RBRACKET", "LPARENTHESIS", "RPARENTHESIS", 
-		"TWODOTS", "MINUS", "PLUS", "MULT", "DIV", "ARROW", "COMMERCIAL_E", "PERCENT", 
+		"TWODOTS", "ARROW", "MINUS", "PLUS", "MULT", "DIV", "COMMERCIAL_E", "PERCENT", 
 		"EQUALS", "DIFFERENT", "GREATERTHANEQ", "LESSTHANEQ", "GREATERTHAN", "LESSTHAN", 
 		"NOT", "LITERAL", "INTEIRO", "REAL", "LOGICO", "OR", "AND", "VERDADEIRO", 
 		"FALSO", "REGISTRO", "FIM_REGISTRO", "PROCEDIMENTO", "FIM_PROCEDIMENTO", 
@@ -112,8 +112,8 @@ public class LAGrammar1Lexer extends Lexer {
 		"\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
 		"\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\f\3\f"+
-		"\3\r\3\r\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3"+
-		"\23\3\24\3\24\3\24\3\25\3\25\3\26\3\26\3\27\3\27\3\30\3\30\3\30\3\31\3"+
+		"\3\r\3\r\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\3\21\3\21\3\22\3\22\3"+
+		"\23\3\23\3\24\3\24\3\25\3\25\3\26\3\26\3\27\3\27\3\30\3\30\3\30\3\31\3"+
 		"\31\3\31\3\32\3\32\3\32\3\33\3\33\3\34\3\34\3\35\3\35\3\35\3\35\3\36\3"+
 		"\36\3\36\3\36\3\36\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3"+
 		"\37\3 \3 \3 \3 \3 \3!\3!\3!\3!\3!\3!\3!\3\"\3\"\3\"\3#\3#\3$\3$\3$\3$"+
@@ -152,8 +152,8 @@ public class LAGrammar1Lexer extends Lexer {
 		"\2\5\u0093\3\2\2\2\7\u00a1\3\2\2\2\t\u00a9\3\2\2\2\13\u00b3\3\2\2\2\r"+
 		"\u00b5\3\2\2\2\17\u00ba\3\2\2\2\21\u00bc\3\2\2\2\23\u00be\3\2\2\2\25\u00c0"+
 		"\3\2\2\2\27\u00c2\3\2\2\2\31\u00c4\3\2\2\2\33\u00c6\3\2\2\2\35\u00c8\3"+
-		"\2\2\2\37\u00cb\3\2\2\2!\u00cd\3\2\2\2#\u00cf\3\2\2\2%\u00d1\3\2\2\2\'"+
-		"\u00d3\3\2\2\2)\u00d6\3\2\2\2+\u00d8\3\2\2\2-\u00da\3\2\2\2/\u00dc\3\2"+
+		"\2\2\2\37\u00cb\3\2\2\2!\u00ce\3\2\2\2#\u00d0\3\2\2\2%\u00d2\3\2\2\2\'"+
+		"\u00d4\3\2\2\2)\u00d6\3\2\2\2+\u00d8\3\2\2\2-\u00da\3\2\2\2/\u00dc\3\2"+
 		"\2\2\61\u00df\3\2\2\2\63\u00e2\3\2\2\2\65\u00e5\3\2\2\2\67\u00e7\3\2\2"+
 		"\29\u00e9\3\2\2\2;\u00ed\3\2\2\2=\u00f5\3\2\2\2?\u00fd\3\2\2\2A\u0102"+
 		"\3\2\2\2C\u0109\3\2\2\2E\u010c\3\2\2\2G\u010e\3\2\2\2I\u0119\3\2\2\2K"+
@@ -181,12 +181,12 @@ public class LAGrammar1Lexer extends Lexer {
 		"\7\60\2\2\u00bf\24\3\2\2\2\u00c0\u00c1\7]\2\2\u00c1\26\3\2\2\2\u00c2\u00c3"+
 		"\7_\2\2\u00c3\30\3\2\2\2\u00c4\u00c5\7*\2\2\u00c5\32\3\2\2\2\u00c6\u00c7"+
 		"\7+\2\2\u00c7\34\3\2\2\2\u00c8\u00c9\7\60\2\2\u00c9\u00ca\7\60\2\2\u00ca"+
-		"\36\3\2\2\2\u00cb\u00cc\7/\2\2\u00cc \3\2\2\2\u00cd\u00ce\7-\2\2\u00ce"+
-		"\"\3\2\2\2\u00cf\u00d0\7,\2\2\u00d0$\3\2\2\2\u00d1\u00d2\7\61\2\2\u00d2"+
-		"&\3\2\2\2\u00d3\u00d4\7>\2\2\u00d4\u00d5\7/\2\2\u00d5(\3\2\2\2\u00d6\u00d7"+
-		"\7(\2\2\u00d7*\3\2\2\2\u00d8\u00d9\7\'\2\2\u00d9,\3\2\2\2\u00da\u00db"+
-		"\7?\2\2\u00db.\3\2\2\2\u00dc\u00dd\7>\2\2\u00dd\u00de\7@\2\2\u00de\60"+
-		"\3\2\2\2\u00df\u00e0\7@\2\2\u00e0\u00e1\7?\2\2\u00e1\62\3\2\2\2\u00e2"+
+		"\36\3\2\2\2\u00cb\u00cc\7>\2\2\u00cc\u00cd\7/\2\2\u00cd \3\2\2\2\u00ce"+
+		"\u00cf\7/\2\2\u00cf\"\3\2\2\2\u00d0\u00d1\7-\2\2\u00d1$\3\2\2\2\u00d2"+
+		"\u00d3\7,\2\2\u00d3&\3\2\2\2\u00d4\u00d5\7\61\2\2\u00d5(\3\2\2\2\u00d6"+
+		"\u00d7\7(\2\2\u00d7*\3\2\2\2\u00d8\u00d9\7\'\2\2\u00d9,\3\2\2\2\u00da"+
+		"\u00db\7?\2\2\u00db.\3\2\2\2\u00dc\u00dd\7>\2\2\u00dd\u00de\7@\2\2\u00de"+
+		"\60\3\2\2\2\u00df\u00e0\7@\2\2\u00e0\u00e1\7?\2\2\u00e1\62\3\2\2\2\u00e2"+
 		"\u00e3\7>\2\2\u00e3\u00e4\7?\2\2\u00e4\64\3\2\2\2\u00e5\u00e6\7@\2\2\u00e6"+
 		"\66\3\2\2\2\u00e7\u00e8\7>\2\2\u00e88\3\2\2\2\u00e9\u00ea\7p\2\2\u00ea"+
 		"\u00eb\7c\2\2\u00eb\u00ec\7q\2\2\u00ec:\3\2\2\2\u00ed\u00ee\7n\2\2\u00ee"+
