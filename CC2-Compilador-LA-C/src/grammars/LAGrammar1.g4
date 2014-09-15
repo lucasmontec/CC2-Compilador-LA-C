@@ -35,9 +35,17 @@ decl_local_global:
 /*4. Regra de declaração local*/
 declaracao_local:
     DECLARE variavel
-    {
-     top().addTokens($variavel.names,$variavel.t);
-    }
+    {/*LUCCAS*/
+     if($variavel.t.equals("literal") 
+     || $variavel.t.equals("inteiro") 
+     || $variavel.t.equals("real") 
+     || $variavel.t.equals("logico") ){
+                                 
+        top().addTokens($variavel.names,$variavel.t);
+     }else if(isTokenPresent($variavel.t)){ /*verificar se eh do tipo custom*/
+        top().addTokens($variavel.names,$variavel.t);
+     }
+    }/*FIM-LUCCAS*/
     | CONSTANTE IDENT COLON tipo_basico EQUALS valor_constante 
     | TIPO IDENT COLON tipo_basico EQUALS valor_constante
     | TIPO IDENT COLON tipo;
@@ -48,12 +56,16 @@ variavel
     @init{ $names = new ArrayList<>(); $t = ""; }
     :
     IDENT dimensao mais_var COLON tipo
-            {
-             $t = $tipo.val;
-             $names.add($IDENT.text);
-             $names.addAll($mais_var.nomes);
-             } /*adicionar tipo*/
-        ;
+        {/*LUCCAS*/
+             if(isTokenPresent($IDENT.text)){
+                $t = $tipo.val;
+                $names.add($IDENT.text);
+                $names.addAll($mais_var.nomes);
+             }else{
+                error("Identificador nao declarado"+ $IDENT.text, $IDENT.getLine());
+             }
+             /*FIM-LUCCAS*/             
+         };
 
 /*6. Extensão da lista de variáveis*/
 mais_var returns [ List<String> nomes ]
@@ -230,10 +242,16 @@ cmd:
        
    |   atribuicao /*Atribuicao regra 30a*/
        
-   |   RETORNE expressao
-       { if(!top().getScope().equals("FUNC"))
-            error("retorne em local inadequado.",$RETORNE.getLine());
-       }
+   |   RETORNE expressao/*LUCCAS*/
+       {    bool erro = true;
+            for(TokenSymbolTable currentTable : allTables()){
+              if(currentTable.getScope().equals("FUNC"))
+                erro = false;
+            }
+            if(error){
+              error("Retorne em local inadequado", $RETORNE.getLine());       
+            }
+       }/*FIM-LUCCAS*/
    ;
      
 /*28. Repetição de expressão para listagem de expressões*/
