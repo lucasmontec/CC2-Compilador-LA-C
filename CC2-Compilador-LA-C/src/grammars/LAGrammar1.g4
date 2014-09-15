@@ -36,11 +36,29 @@ decl_local_global:
 declaracao_local:
     DECLARE variavel
     {
-     top().addTokens($variavel.names,$variavel.t);
+     for (String s : $variavel.names){
+      if(top().isTokenPresent(s))
+        error("Identificar ja declarado: "+s, $DECLARE.getLine());
+      else
+        top().addToken(s, $variavel.t);
+     }     
+     /*top().addTokens($variavel.names,$variavel.t);*/
     }
     | CONSTANTE IDENT COLON tipo_basico EQUALS valor_constante 
-    | TIPO IDENT COLON tipo_basico EQUALS valor_constante
-    | TIPO IDENT COLON tipo;
+     {
+      if(top().isTokenPresent($IDENT.text)
+        error("Constante ja declarada: "+$IDENT.text, $IDENT.getLine());
+      else
+        top().addToken($IDENT.text, $tipo_basico.val);
+     }      
+    | TIPO IDENT COLON tipo
+     {
+      if(top().isTokenPresent($IDENT.text)
+        error("Tipo ja declarado: "+$IDENT.text, $IDENT.getLine());
+      else
+        top().addToken($IDENT.text, $tipo.val);
+     };
+
 
 /*5. Lista de variaveis com variaveis a mais do mesmo tipo opcionais*/
 variavel
