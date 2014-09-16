@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
  * @author joaovitor & Lucas M Carvalhaes
  */
 public class Main {
-    /*public static void main(String ...args){
+    public static void main(String ...args){
         //Stream de texto
         ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_1_erro_semantico);
         //Lexer para gerar os tokens
@@ -31,5 +31,5 @@ public class Main {
         //Chama o token inicial
         parser.programa();
         //System.out.println(parser.programa().toStringTree());
-    }*/
+    }
 }

@@ -189,7 +189,7 @@ valor_constante
     returns [ String val ]
     @init{ $val = ""; }
     :
-     CADEIA { $val = "cadeia"; } |
+     CADEIA { $val = "literal"; } |
      NUM_INT { $val = "inteiro"; } |
      NUM_REAL { $val = "real"; } |
      VERDADEIRO { $val = "logico"; } |
@@ -526,7 +526,7 @@ parcela_nao_unario
                        }
                        $val = "^"+tokenType(identifier);
                       }
-                      dimensao | CADEIA {$val = "cadeia";};
+                      dimensao | CADEIA {$val = "literal";};
 
 /*49. TODO: Descobrir o que o operador % faz*/
 outras_parcelas
