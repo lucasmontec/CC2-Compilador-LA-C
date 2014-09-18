@@ -6,6 +6,8 @@
 package Semantic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -18,9 +20,45 @@ public class SemanticUtil {
     private static Stack<TokenSymbolTable> stack = new Stack<>();
     private static Stack<SemanticError> errors = new Stack<>();
 
+    /*
+    Methods and data to handle structures and complex types
+    */
+    
+    private static HashMap<String,String> composedTypeRegistry = new HashMap<>();
+    
+    public static void registerStruct(String token, String types){
+        composedTypeRegistry.put(token, types);
+    }
+    
+    public static String structType(String token){
+        return composedTypeRegistry.get(token);
+    }
+    
+    public static String structType(String token, int index){
+        String type = composedTypeRegistry.get(token);
+        if(type == null)
+            return "tipo_invalido";
+        
+        ArrayList<String> types = structTypes(type);
+        if(index < types.size() && index >= 0)
+            return types.get(index);
+        
+        return "tipo_invalido";
+    }
+    
+    public static ArrayList<String> structTypes(String compoundType){
+        String[] types = compoundType.replace("$[", "").replace("]", "").split(",");
+        return new ArrayList<>(Arrays.asList(types));
+    }
+    
+    /*
+    Methods and data to handle general semantic rules
+    */
+    
     public static void reset(){
         stack = new Stack<>();
         errors = new Stack<>();
+        composedTypeRegistry = new HashMap<>();
     }
     
     public static boolean hasErrors(){

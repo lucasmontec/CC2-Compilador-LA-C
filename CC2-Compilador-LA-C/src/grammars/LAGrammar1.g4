@@ -124,11 +124,11 @@ ponteiros_opcionais
 /*9.*/
 outros_ident
     /*Last name � o nome do ultimo identificador*/
-    returns [ String lastName ]
-    @init{ $lastName = ""; }
+    returns [ String fullName ]
+    @init{ $fullName = ""; }
     :
      /*Retorna cada nome. O ultimo � o tipo da lista de chamadas.*/
-    (DOT identificador { $lastName=$identificador.nome; })?;
+    (DOT identificador { $fullName+="."+$identificador.nome; })?;
 
 /*10. Dimens�o de listas*/
 dimensao: (LBRACKET exp_aritmetica RBRACKET)*;
@@ -198,7 +198,7 @@ valor_constante
 /*18. Registros - Struct*/
 registro
     returns [ String val ]
-    @init{ $val = "reg"; }
+    @init{ $val = "$"; }
     :
      REGISTRO variavel { $val += "["+$variavel.t; } 
      mais_variaveis { 
@@ -258,20 +258,30 @@ cmd:
    |   ESCREVA LPARENTHESIS expressao mais_expressao RPARENTHESIS
        
    |   SE expressao ENTAO comandos senao_opcional FIMSE
-   |   CASO exp_aritmetica SEJA selecao senao_opcional FIMCASO
+   |   { push(new TokenSymbolTable("CASE")); }
+       CASO exp_aritmetica SEJA selecao senao_opcional FIMCASO
+       { pop(); }
        
-   |   PARA IDENT
+   |   { push(new TokenSymbolTable("FOR")); }
+       PARA IDENT
        /*Verifica se o token esta declarado*/
        {
         if(!isTokenPresent($IDENT.text))
             error("Contador de loop nao declarado: "+$IDENT.text,$IDENT.getLine());
        }
        ARROW exp_aritmetica ATE exp_aritmetica FACA comandos FIMPARA
+       { pop(); }
        
-   |   ENQUANTO expressao FACA comandos FIMENQUANTO
-   |   FACA comandos ATE expressao
+   |   { push(new TokenSymbolTable("WHILE")); }
+       ENQUANTO expressao FACA comandos FIMENQUANTO
+       {pop();}
+       
+   |   { push(new TokenSymbolTable("DO")); }
+       FACA comandos ATE expressao
+       { pop(); }
        
    |   UP_HAT IDENT outros_ident dimensao ARROW expressao /*Atrib de ponteiro*/
+       /*TODO - TYPECHECK*/
        /*Verifica se o token esta declarado*/
        {
         if(!isTokenPresent($IDENT.text))
@@ -317,14 +327,11 @@ atribuicao:
                 if(!isTokenPresent($IDENT.text)){
                     error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
                 }else{
-                    String correctToken = $IDENT.text;
+                    String fullToken = $IDENT.text+"."+$outros_ident.fullName;
                     
-                    if($outros_ident.lastName.length() > 0)
-                        correctToken = $outros_ident.lastName;
-                    
-                    if(!tokenType(correctToken).equals($expressao.val))
+                    if(!tokenType(fullToken).equals($expressao.val))
                         error("Atribuicao invalida: "+correctToken+" do tipo "+
-                        tokenType(correctToken)+" nao pode receber a expressao"+
+                        tokenType(fullToken)+" nao pode receber a expressao"+
                         " do tipo "+$expressao.val
                         ,$IDENT.getLine());
                 }
@@ -505,10 +512,9 @@ parcela_unario
     @init {$val = "";}:
                  (NUM_INT {$val = "inteiro";}
                  | NUM_REAL {$val = "real";})
-                 | UP_HAT IDENT {$val = tokenType($IDENT.text);} 
-                 outros_ident 
-                    { if($outros_ident.lastName.length() > 0)
-                                    $val = tokenType($outros_ident.lastName);
+                 | UP_HAT IDENT outros_ident 
+                    {
+                        $val = tokenType($IDENT.text+$outros_ident.fullName);
                     }
                  dimensao
                  | IDENT chamada_partes {$val = tokenType($IDENT.text);} 
@@ -520,11 +526,8 @@ parcela_nao_unario
     @init {$val = "";}:
                       '&' IDENT outros_ident
                       {
-                       String identifier = $IDENT.text;
-                       if($outros_ident.lastName.length() > 0){
-                            identifier = $outros_ident.lastName;                        
-                       }
-                       $val = "^"+tokenType(identifier);
+                       /*Coloca o UPHAT para fazer o typematch de ponteiro com endereco*/
+                       $val = "^"+tokenType($IDENT.text+$outros_ident.fullName);
                       }
                       dimensao | CADEIA {$val = "cadeia";};
 
