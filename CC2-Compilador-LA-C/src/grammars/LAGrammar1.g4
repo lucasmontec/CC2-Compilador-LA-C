@@ -189,7 +189,7 @@ valor_constante
     returns [ String val ]
     @init{ $val = ""; }
     :
-     CADEIA { $val = "cadeia"; } |
+     CADEIA { $val = "literal"; } |
      NUM_INT { $val = "inteiro"; } |
      NUM_REAL { $val = "real"; } |
      VERDADEIRO { $val = "logico"; } |
@@ -529,7 +529,7 @@ parcela_nao_unario
                        /*Coloca o UPHAT para fazer o typematch de ponteiro com endereco*/
                        $val = "^"+tokenType($IDENT.text+$outros_ident.fullName);
                       }
-                      dimensao | CADEIA {$val = "cadeia";};
+                      dimensao | CADEIA {$val = "literal";};
 
 /*49. TODO: Descobrir o que o operador % faz*/
 outras_parcelas

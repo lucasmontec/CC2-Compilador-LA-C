@@ -1,4 +1,4 @@
-// Generated from C:\Users\Lucas\git\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1.g4 by ANTLR 4.1
+// Generated from /home/joaovitor/NetBeansProjects/CC2-Compilador-LA-C/CC2-Compilador-LA-C/src/grammars/LAGrammar1.g4 by ANTLR 4.1
 package antlr;
 
   import Semantic.TokenSymbol;
@@ -88,14 +88,14 @@ public class LAGrammar1Lexer extends Lexer {
 		case 66: WSNL_action((RuleContext)_localctx, actionIndex); break;
 		}
 	}
-	private void WSNL_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 1: _channel = HIDDEN;  break;
-		}
-	}
 	private void COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 0: _channel = HIDDEN;  break;
+		}
+	}
+	private void WSNL_action(RuleContext _localctx, int actionIndex) {
+		switch (actionIndex) {
+		case 1: _channel = HIDDEN;  break;
 		}
 	}
 
