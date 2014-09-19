@@ -20,6 +20,7 @@ public class testFileList {
 
     static File dir = new File("testFiles/sem_erro");
     //static File dir = new File("testFiles/erro_semantico");
+    //static File dir = new File("testFiles/erro_sintatico");
     static ArrayList<File> algoritmos;
 
     public static void main(String... args) {
@@ -33,13 +34,20 @@ public class testFileList {
         
         for(File f : algoritmos){
             System.out.println("\nFile: "+f.getName());
-            parse(f);
-            System.out.println("\nResult: "+(SemanticUtil.hasErrors()?"Errors!":"Successful")+"\n");
+            int errors = parse(f);
+            String syntaticResult = (errors>0?(errors+" syntax erros."):"");
+            String semanticResult = (SemanticUtil.hasErrors()?" Semantic errors!": "");
+            String result = (
+                    (syntaticResult.length()+semanticResult.length())>0?
+                    syntaticResult+semanticResult
+                    :
+                    "Success");
+            System.out.println("\nResult: "+result+"\n");
             SemanticUtil.reset();
         }
     }
     
-    private static void parse(File f){
+    private static int parse(File f){
         //Stream de texto
         ANTLRInputStream inputStream = null;
         try {
@@ -49,7 +57,7 @@ public class testFileList {
         }
         if(inputStream == null){
             System.err.println("Couldn't read file!");
-            return;
+            return 0;
         }
         
         //Lexer para gerar os tokens
@@ -61,5 +69,7 @@ public class testFileList {
         
         //Chama o token inicial
         parser.programa();
+        
+        return parser.getNumberOfSyntaxErrors();
     }
 }

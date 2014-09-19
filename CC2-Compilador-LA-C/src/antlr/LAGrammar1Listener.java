@@ -4,6 +4,7 @@ package antlr;
   import Semantic.TokenSymbol;
   import Semantic.TokenSymbolTable;
   import static Semantic.SemanticUtil.*;
+  import java.util.*;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -34,6 +35,17 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOp_multiplicacao(@NotNull LAGrammar1Parser.Op_multiplicacaoContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link LAGrammar1Parser#chamada_metodo}.
+	 * @param ctx the parse tree
+	 */
+	void enterChamada_metodo(@NotNull LAGrammar1Parser.Chamada_metodoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LAGrammar1Parser#chamada_metodo}.
+	 * @param ctx the parse tree
+	 */
+	void exitChamada_metodo(@NotNull LAGrammar1Parser.Chamada_metodoContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#intervalo_opcional}.
@@ -146,6 +158,17 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	void exitOutros_ident(@NotNull LAGrammar1Parser.Outros_identContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link LAGrammar1Parser#chamada_parte}.
+	 * @param ctx the parse tree
+	 */
+	void enterChamada_parte(@NotNull LAGrammar1Parser.Chamada_parteContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LAGrammar1Parser#chamada_parte}.
+	 * @param ctx the parse tree
+	 */
+	void exitChamada_parte(@NotNull LAGrammar1Parser.Chamada_parteContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#outros_fatores}.
 	 * @param ctx the parse tree
 	 */
@@ -190,17 +213,6 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	void exitMais_expressao(@NotNull LAGrammar1Parser.Mais_expressaoContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link LAGrammar1Parser#parcela_nao_unario}.
-	 * @param ctx the parse tree
-	 */
-	void enterParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LAGrammar1Parser#parcela_nao_unario}.
-	 * @param ctx the parse tree
-	 */
-	void exitParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#declaracao_global}.
 	 * @param ctx the parse tree
 	 */
@@ -210,6 +222,17 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaracao_global(@NotNull LAGrammar1Parser.Declaracao_globalContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link LAGrammar1Parser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LAGrammar1Parser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#mais_var}.
@@ -254,17 +277,6 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCmd(@NotNull LAGrammar1Parser.CmdContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link LAGrammar1Parser#chamada_partes}.
-	 * @param ctx the parse tree
-	 */
-	void enterChamada_partes(@NotNull LAGrammar1Parser.Chamada_partesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LAGrammar1Parser#chamada_partes}.
-	 * @param ctx the parse tree
-	 */
-	void exitChamada_partes(@NotNull LAGrammar1Parser.Chamada_partesContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#registro}.
@@ -496,17 +508,6 @@ public interface LAGrammar1Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaracoes(@NotNull LAGrammar1Parser.DeclaracoesContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link LAGrammar1Parser#mais_parametros}.
-	 * @param ctx the parse tree
-	 */
-	void enterMais_parametros(@NotNull LAGrammar1Parser.Mais_parametrosContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LAGrammar1Parser#mais_parametros}.
-	 * @param ctx the parse tree
-	 */
-	void exitMais_parametros(@NotNull LAGrammar1Parser.Mais_parametrosContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link LAGrammar1Parser#tipo_estendido}.

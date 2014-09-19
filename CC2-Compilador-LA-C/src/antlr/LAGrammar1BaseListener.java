@@ -4,6 +4,7 @@ package antlr;
   import Semantic.TokenSymbol;
   import Semantic.TokenSymbolTable;
   import static Semantic.SemanticUtil.*;
+  import java.util.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -42,6 +43,19 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitOp_multiplicacao(@NotNull LAGrammar1Parser.Op_multiplicacaoContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterChamada_metodo(@NotNull LAGrammar1Parser.Chamada_metodoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitChamada_metodo(@NotNull LAGrammar1Parser.Chamada_metodoContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -178,6 +192,19 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterChamada_parte(@NotNull LAGrammar1Parser.Chamada_parteContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitChamada_parte(@NotNull LAGrammar1Parser.Chamada_parteContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterOutros_fatores(@NotNull LAGrammar1Parser.Outros_fatoresContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -230,19 +257,6 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterDeclaracao_global(@NotNull LAGrammar1Parser.Declaracao_globalContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -250,6 +264,19 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitDeclaracao_global(@NotNull LAGrammar1Parser.Declaracao_globalContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitParcela_nao_unario(@NotNull LAGrammar1Parser.Parcela_nao_unarioContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -302,19 +329,6 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitCmd(@NotNull LAGrammar1Parser.CmdContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterChamada_partes(@NotNull LAGrammar1Parser.Chamada_partesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitChamada_partes(@NotNull LAGrammar1Parser.Chamada_partesContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -588,19 +602,6 @@ public class LAGrammar1BaseListener implements LAGrammar1Listener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitDeclaracoes(@NotNull LAGrammar1Parser.DeclaracoesContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterMais_parametros(@NotNull LAGrammar1Parser.Mais_parametrosContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitMais_parametros(@NotNull LAGrammar1Parser.Mais_parametrosContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

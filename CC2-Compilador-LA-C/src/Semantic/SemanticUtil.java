@@ -19,27 +19,16 @@ public class SemanticUtil {
 
     private static Stack<TokenSymbolTable> stack = new Stack<>();
     private static Stack<SemanticError> errors = new Stack<>();
-
+    private static HashMap<String, String> methodSignature = new HashMap<>();
     /*
     Methods and data to handle structures and complex types
     */
     
-    private static HashMap<String,String> composedTypeRegistry = new HashMap<>();
-    
-    public static void registerStruct(String token, String types){
-        composedTypeRegistry.put(token, types);
-    }
-    
-    public static String structType(String token){
-        return composedTypeRegistry.get(token);
-    }
-    
-    public static String structType(String token, int index){
-        String type = composedTypeRegistry.get(token);
-        if(type == null)
+    public static String structType(String composedType, int index){
+        if(composedType == null)
             return "tipo_invalido";
         
-        ArrayList<String> types = structTypes(type);
+        ArrayList<String> types = structTypes(composedType);
         if(index < types.size() && index >= 0)
             return types.get(index);
         
@@ -47,8 +36,31 @@ public class SemanticUtil {
     }
     
     public static ArrayList<String> structTypes(String compoundType){
-        String[] types = compoundType.replace("$[", "").replace("]", "").split(",");
+        String[] types = compoundType.replace("$[", "")
+                .replace(",,",",").replace("]", "").split(",");
         return new ArrayList<>(Arrays.asList(types));
+    }
+    
+    public static String getSubtypeName(String composedTypePart){
+        return composedTypePart.split(":")[0];
+    }
+    
+    public static String getSubtypeType(String composedTypePart){
+        return composedTypePart.split(":")[1];
+    }
+    
+    //Method to handle signature of functions and procedures
+    public static void registerSignature(String method, String signature){
+        methodSignature.put(method, signature);
+    }
+    
+    public static String getSignature(String method){
+        return methodSignature.get(method);
+                
+    }
+    
+    public static void printSignatures(){
+         System.out.println("Signatures{\n" +methodSignature+ "\n}");
     }
     
     /*
@@ -58,7 +70,7 @@ public class SemanticUtil {
     public static void reset(){
         stack = new Stack<>();
         errors = new Stack<>();
-        composedTypeRegistry = new HashMap<>();
+        methodSignature = new HashMap<>();
     }
     
     public static boolean hasErrors(){

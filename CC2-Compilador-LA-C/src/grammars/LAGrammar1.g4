@@ -6,6 +6,7 @@ grammar LAGrammar1;
   import Semantic.TokenSymbol;
   import Semantic.TokenSymbolTable;
   import static Semantic.SemanticUtil.*;
+  import java.util.*;
 }
 
 /*SYNTAX*/
@@ -14,13 +15,14 @@ grammar LAGrammar1;
 programa:
             { push(new TokenSymbolTable("decl_globais")); }
         declaracoes ALGORITMO corpo
-            { printSemanticTable(); }
+            /*{ printSemanticTable(); }*/
             FIM_ALGORITMO
             {
-             if(hasErrors())
-                printErrors();
-             pop();/*Decl globais*/
-             }
+                if(hasErrors())
+                   printErrors();
+                /*printSignatures();*/
+                pop();/*Decl globais*/
+            }
         ;
         
 
@@ -33,7 +35,10 @@ decl_local_global:
             declaracao_local | declaracao_global;         
 
 /*4. Regra de declara��o local*/
-declaracao_local:
+declaracao_local
+    returns[String val]
+    @init{$val = "";}
+    :
     DECLARE variavel
     {
         if($variavel.t.trim().replace("^","").equals("literal") 
@@ -52,31 +57,45 @@ declaracao_local:
            for (String s : $variavel.names){
                if(top().isTokenPresent(s))
                    error("Identificador ja declarado: "+s, $DECLARE.getLine());
-                 else
+                 else{
+                   /*adiciona a variável*/
                    top().addToken(s, $variavel.t);
+                   /*adiciona subvariáveis de registros*/
+                   if($variavel.t.startsWith("$")){
+                         for(String st: structTypes($variavel.t))
+                               top().addToken(s + "." + getSubtypeName(st), getSubtypeType(st));
+                   }
+                   if(tokenType($variavel.t).startsWith("$")){
+                         for(String st: structTypes(tokenType($variavel.t)))
+                               top().addToken(s + "." + getSubtypeName(st), getSubtypeType(st));
+                   }
+                 }
            }  
         }else{
            error("Undeclared variable type: "+$variavel.t, $DECLARE.getLine()); 
         }
+        $val = $variavel.names.toString();
     }
     | CONSTANTE IDENT COLON tipo_basico EQUALS valor_constante 
      {
-      if(!$tipo_basico.val.equals($valor_constante.val)){
-         error("Atribuicao invalida: "+$IDENT.text+
-         " tipo "+$tipo_basico.val+" com "+$valor_constante.val,
-         $IDENT.getLine());  
-      }
-      if(top().isTokenPresent($IDENT.text))
-        error("Constante ja declarada: "+$IDENT.text, $IDENT.getLine());
-      else
-        top().addToken($IDENT.text, $tipo_basico.val);
+        if(!$tipo_basico.val.equals($valor_constante.val)){
+           error("Atribuicao invalida: "+$IDENT.text+
+           " tipo "+$tipo_basico.val+" com "+$valor_constante.val,
+           $IDENT.getLine());  
+        }
+        if(top().isTokenPresent($IDENT.text))
+          error("Constante ja declarada: "+$IDENT.text, $IDENT.getLine());
+        else
+          top().addToken($IDENT.text, $tipo_basico.val);
+        $val = $tipo_basico.val; 
      }      
     | TIPO IDENT COLON tipo
      {
-      if(top().isTokenPresent($IDENT.text))
-        error("Tipo ja declarado: "+$IDENT.text, $IDENT.getLine());
-      else
-        top().addToken($IDENT.text, $tipo.val);
+        if(top().isTokenPresent($IDENT.text))
+          error("Tipo ja declarado: "+$IDENT.text, $IDENT.getLine());
+        else
+          top().addToken($IDENT.text, $tipo.val);
+        $val = $tipo.val;
      };
 
 
@@ -145,15 +164,21 @@ tipo
     tipo_estendido { $val=$tipo_estendido.val; };
 
 /*12. Lista de identificadores*/
-mais_ident:
-    (COMMA identificador)*;
+mais_ident
+    returns [ ArrayList<String> idents]
+    @init{ $idents = new ArrayList<>();}
+    :
+    (COMMA identificador{$idents.add($identificador.nome);})*;
 
 /*13. Lista de pelomenos uma vari�vel*/
 mais_variaveis
-    returns [ List<String> tipos ]
-    @init{ $tipos = new ArrayList<>(); }
+    returns [ HashMap<String, String> nomes, List<String> tipos ]
+    @init{ $tipos = new ArrayList<>(); $nomes = new HashMap<>();}
     :
-    (variavel {$tipos.add($variavel.t);} )*;
+    (variavel {$tipos.add($variavel.t);
+               for(String s: $variavel.names)
+                    $nomes.put(s, $variavel.t);                
+               } )*;
 
 /*14. Tipos de elementos b�sicos*/
 tipo_basico
@@ -200,10 +225,14 @@ registro
     returns [ String val ]
     @init{ $val = "$"; }
     :
-     REGISTRO variavel { $val += "["+$variavel.t; } 
+     REGISTRO variavel 
+     { $val += "[";
+        for(String s: $variavel.names)
+            $val += s + ":" +$variavel.t+",";         
+     }
      mais_variaveis { 
-                     for(String s : $mais_variaveis.tipos){
-                        $val += ","+s;                                    
+                     for(Map.Entry<String, String> e: $mais_variaveis.nomes.entrySet()){                     
+                        $val += ","+e.getKey()+":"+e.getValue();
                      }
                     }
      FIM_REGISTRO
@@ -218,31 +247,115 @@ registro
 declaracao_global:
       PROCEDIMENTO IDENT 
         { push(new TokenSymbolTable("PROC")); }
-        LPARENTHESIS parametros_opcional RPARENTHESIS declaracoes_locais comandos FIM_PROCEDIMENTO
-        { pop(); top().addToken($IDENT.text, "PROC"); }
+        LPARENTHESIS parametros_opcional
+        {
+            for(Map.Entry<String,String> entry : $parametros_opcional.nomes.entrySet()){
+                top().addToken(entry.getKey(), entry.getValue());
+                
+                /*adiciona subvariáveis de registros*/
+                if(entry.getValue().startsWith("$")){
+                      for(String st: structTypes(entry.getValue()))
+                            top().addToken(entry.getKey() + "." + getSubtypeName(st), getSubtypeType(st));
+                }
+                if(tokenType(entry.getValue()).startsWith("$")){
+                      for(String st: structTypes(tokenType(entry.getValue())))
+                            top().addToken(entry.getKey() + "." + getSubtypeName(st), getSubtypeType(st));
+                }
+            }
+        }
+        RPARENTHESIS declaracoes_locais comandos FIM_PROCEDIMENTO
+        { 
+            /*System.out.println("*******************");
+            System.out.println("*******************");
+            printSemanticTable();
+            System.out.println("*******************");
+            System.out.println("*******************");*/
+            pop();
+            top().addToken($IDENT.text, "PROC");
+            registerSignature($IDENT.text, $parametros_opcional.val); 
+        }
       
       | FUNCAO IDENT
         { push(new TokenSymbolTable("FUNC")); }
-        LPARENTHESIS parametros_opcional RPARENTHESIS COLON tipo_estendido declaracoes_locais comandos FIM_FUNCAO
-        { pop(); top().addToken($IDENT.text, "FUNC"); }           
+        LPARENTHESIS parametros_opcional
+        {
+            for(Map.Entry<String,String> entry : $parametros_opcional.nomes.entrySet()){
+                top().addToken(entry.getKey(), entry.getValue());
+                
+                /*adiciona subvariáveis de registros*/
+                if(entry.getValue().startsWith("$")){
+                      for(String st: structTypes(entry.getValue()))
+                            top().addToken(entry.getKey() + "." + getSubtypeName(st), getSubtypeType(st));
+                }
+                if(tokenType(entry.getValue()).startsWith("$")){
+                      for(String st: structTypes(tokenType(entry.getValue())))
+                            top().addToken(entry.getKey() + "." + getSubtypeName(st), getSubtypeType(st));
+                }
+            }
+        }
+        RPARENTHESIS COLON tipo_estendido declaracoes_locais comandos FIM_FUNCAO
+        { 
+            pop(); 
+            top().addToken($IDENT.text, $tipo_estendido.val);
+            registerSignature($IDENT.text, $parametros_opcional.val);
+        }           
       ;
 
 /*20. Parametros 0 ou mais*/
-parametros_opcional: parametro?;
+parametros_opcional
+    returns [ HashMap<String,String> nomes, String val ]
+    @init{
+        $val = ""; 
+        $nomes = new HashMap<>();
+    }
+    : (parametro{$val = $parametro.val; $nomes = $parametro.nomes;})?;
 
 /*21.Parametro*/
-parametro:
-      var_opcional identificador mais_ident COLON tipo_estendido mais_parametros;
+parametro
+    returns [ HashMap<String,String> nomes, String val ]
+    @init{
+            $val = "";
+            $nomes = new HashMap<>();
+          }
+    :
+      var_opcional identificador mais_ident COLON tipo_estendido
+      {
+         $val += $tipo_estendido.val;
+         $nomes.put($identificador.nome,$tipo_estendido.val);
+         for(String s: $mais_ident.idents){
+            $val += "," + $tipo_estendido.val;
+            $nomes.put(s,$tipo_estendido.val);
+         }
+      }
+      /*mais_parametros*/
+      (COMMA
+       {$val += ",";}
+       var_opcional identificador mais_ident COLON tipo_estendido
+       {
+            $val += $tipo_estendido.val;
+            $nomes.put($identificador.nome,$tipo_estendido.val);
+            for(String s: $mais_ident.idents){
+               $val += "," + $tipo_estendido.val;
+               $nomes.put(s,$tipo_estendido.val);
+            }
+       }
+      )*
+    ;
 
 /*22. Declaracao de variavel opcional*/
 var_opcional: VAR?;
 
 /*23. Lista de parametros*/
-mais_parametros:
-      (COMMA parametro)?;
+/*mais_parametros:
+      (COMMA parametro)?;*/
 
 /*24. Declaracoes de escopo local*/
-declaracoes_locais: declaracao_local*;
+declaracoes_locais
+    returns[String val]
+    @init{$val = "";}
+    : (declaracao_local{$val += " " + $declaracao_local.val;})*
+    {$val.trim();}                    
+ ;
 
 /*25.*/
 corpo:
@@ -254,7 +367,20 @@ comandos:
 
 /*27. Comandos da linguagem*/
 cmd:
-       LEIA LPARENTHESIS identificador mais_ident RPARENTHESIS
+       LEIA LPARENTHESIS identificador mais_ident 
+       {
+          if(!isTokenPresent($identificador.nome))
+            error("Identificador nao declarado: "+$identificador.nome,
+            $LEIA.getLine());
+            
+          for(String s : $mais_ident.idents){
+               if(!isTokenPresent(s))
+                    error("Identificador nao declarado: "+s,
+                    $LEIA.getLine());                               
+          }
+       }
+       RPARENTHESIS
+       
    |   ESCREVA LPARENTHESIS expressao mais_expressao RPARENTHESIS
        
    |   SE expressao ENTAO comandos senao_opcional FIMSE
@@ -284,14 +410,32 @@ cmd:
        /*TODO - TYPECHECK*/
        /*Verifica se o token esta declarado*/
        {
-        if(!isTokenPresent($IDENT.text))
-            error("Ponteiro nao declarado: "+$IDENT.text,$IDENT.getLine());
+            if(!isTokenPresent($IDENT.text))
+                error("Ponteiro nao declarado: "+$IDENT.text,$IDENT.getLine());
+
+            String fullToken = $IDENT.text+$outros_ident.fullName;
+
+            if(!tokenType(fullToken).replace("^","").equals($expressao.val))
+                if(
+                    !(tokenType(fullToken).replace("^","").equals("real")
+                    && $expressao.val.equals("inteiro"))
+                )
+                error("Atribuicao invalida: "+fullToken+" do tipo "+
+                tokenType(fullToken)+" nao pode receber a expressao"+
+                " do tipo "+$expressao.val
+                ,$IDENT.getLine());
        }
    |   IDENT chamada /*Chamada de funcao regra 30b*/
        /*Verifica se o token esta declarado e se os tipos batem*/
        {
         if(!isTokenPresent($IDENT.text))
             error("Identificador nao declarado: "+$IDENT.text,$IDENT.getLine());
+        
+        if(getSignature($IDENT.text) != null)
+            if(!getSignature($IDENT.text).equals($chamada.val))
+                error("Assinatura de chamada de metodo errada: "+$chamada.val
+                +"\nAssinatura esperada: "+getSignature($IDENT.text)
+                ,$IDENT.getLine());                                               
        }
        
    |   atribuicao /*Atribuicao regra 30a*/
@@ -309,8 +453,11 @@ cmd:
    ;
      
 /*28. Repeti��o de express�o para listagem de express�es*/
-mais_expressao:
-    (COMMA expressao)*;
+mais_expressao
+    returns [String val]
+    @init{$val = "";}
+    :
+    (COMMA expressao {$val += ","+$expressao.val;})*;
 
 /*29. Else opcional*/
 senao_opcional:
@@ -327,24 +474,48 @@ atribuicao:
                 if(!isTokenPresent($IDENT.text)){
                     error("Variavel nao declarada: "+$IDENT.text,$IDENT.getLine());
                 }else{
-                    String fullToken = $IDENT.text+"."+$outros_ident.fullName;
+                    String fullToken = $IDENT.text+$outros_ident.fullName;
                     
                     if(!tokenType(fullToken).equals($expressao.val))
-                        error("Atribuicao invalida: "+correctToken+" do tipo "+
-                        tokenType(fullToken)+" nao pode receber a expressao"+
-                        " do tipo "+$expressao.val
-                        ,$IDENT.getLine());
+                        if(
+                        !((tokenType(fullToken).equals("real")
+                        && $expressao.val.equals("inteiro"))
+                        ||
+                        (tokenType(fullToken).equals("inteiro")
+                        && $expressao.val.equals("real")))
+                        )
+                            error("Atribuicao invalida: "+fullToken+" do tipo "+
+                            tokenType(fullToken)+" nao pode receber a expressao "+
+                            $expressao.text+" do tipo "+$expressao.val
+                            ,$IDENT.getLine());
                 }
             }
           ;
 /*30b. Chamada de funcao*/
-chamada:
+chamada
+    returns [String val]
+    @init {$val = "";}
+    :
        LPARENTHESIS argumentos_opcional RPARENTHESIS
+       {
+            $val += $argumentos_opcional.val;
+       }
        ;
 
 /*31. Lista de argumentos opcional com expressao*/
-argumentos_opcional:
-        (expressao mais_expressao)?;
+argumentos_opcional
+    returns [String val]
+    @init {$val = "";}
+    :
+        (expressao
+         {
+            $val += $expressao.val;           
+         }
+         mais_expressao
+         {
+            $val += $mais_expressao.val;  
+         }
+        )?;
 
 /*32. */
 selecao:
@@ -517,7 +688,28 @@ parcela_unario
                         $val = tokenType($IDENT.text+$outros_ident.fullName);
                     }
                  dimensao
-                 | IDENT chamada_partes {$val = tokenType($IDENT.text);} 
+                 | 
+                 IDENT chamada_parte
+                 {
+                  if(!isTokenPresent($IDENT.text+$chamada_parte.fullName))
+                      error("Identificador nao declarado: "+$IDENT.text,$IDENT.getLine());
+                        
+                   $val = tokenType($IDENT.text+$chamada_parte.fullName);
+                 }
+                 |
+                 IDENT chamada_metodo
+                 {
+                  if(!isTokenPresent($IDENT.text))
+                      error("Identificador nao declarado: "+$IDENT.text,$IDENT.getLine());
+                  
+                  if(getSignature($IDENT.text) != null)
+                    if(!getSignature($IDENT.text).equals($chamada_metodo.val))
+                        error("Assinatura de chamada de metodo errada: "+$chamada_metodo.val
+                          +"\nAssiantura esperada: "+getSignature($IDENT.text)
+                          ,$IDENT.getLine()); 
+                        
+                   $val = tokenType($IDENT.text);
+                 }
                  | LPARENTHESIS expressao {$val = $expressao.val;} RPARENTHESIS;
 
 /*48.*/
@@ -543,10 +735,24 @@ outras_parcelas
                             $val = "tipo_invalido";
                         })*;
 
-/*50. TODO: add epsilon*/
-chamada_partes:
-                 LPARENTHESIS expressao mais_expressao RPARENTHESIS
-                 | outros_ident dimensao;
+/*50.*/
+/*chamada_partes:
+                LPARENTHESIS expressao mais_expressao RPARENTHESIS |
+                outros_ident dimensao | ;*/
+
+/*50a.*/
+chamada_metodo
+    returns [String val]
+    @init {$val = "";}
+    :
+     (chamada {$val = $chamada.val;})?;
+
+/*50b.*/
+chamada_parte
+    returns [String fullName]
+    @init {$fullName = "";}
+    :
+                outros_ident { $fullName = $outros_ident.fullName;} dimensao;
 
 /*51.*/
 exp_relacional
@@ -747,9 +953,9 @@ NameStartChar
 /*String*/
 CADEIA: '"' (~[\r\n"] | '""')* '"' ; 
 /*Numero inteiro seq digitos 0-9*/
-NUM_INT: ['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+; 
+NUM_INT: ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')+; 
 /*Numero real com pelomenos um digito antes do ponto*/
-NUM_REAL: ['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+'.'['0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9']+; 
+NUM_REAL: ('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')+'.'('0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9')+; 
 /*Sequencia de letras, digitos, _, come�ando por letra ou _*/
 IDENT: NameStartChar NameChar*; 
 
