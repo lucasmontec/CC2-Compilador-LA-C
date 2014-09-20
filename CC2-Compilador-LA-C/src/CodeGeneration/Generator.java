@@ -240,6 +240,23 @@ public class Generator {
         }
     }
 
+    public static void declareVariablesStruct(ArrayList<String> nomes, String structCode) {
+        String blob = structCode;
+        
+        for(String nome : nomes){ 
+            blob += " "+nome;
+        }
+        blob += ";";
+        code.append(blob);
+    }
+       
+    public static void declareVariableStruct(String nome, String structCode) {
+        String blob = structCode;
+
+        blob += " "+nome+";";
+        code.append(blob);
+    }
+    
     public static void declareVariable(String nome, String tipo) {
         declareVariable(nome, tipo, "");
     }
@@ -397,8 +414,7 @@ public class Generator {
                 blob = "int";
                 break;
             default:
-                /*TODO struct e tipos custom*/
-                blob = "todo";
+                blob = tipo;
                 break;
         } 
         return blob;

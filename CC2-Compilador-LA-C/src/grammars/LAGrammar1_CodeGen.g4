@@ -107,7 +107,13 @@ declaracao_local
           top().addToken($IDENT.text, $tipo.val);
         $val = $tipo.val;
         
-        Generator.addCode(Generator.typedef($IDENT.text, "todo"));
+        String tp = Generator.converteTipo($tipo.val);
+        
+        if($tipo.code.length() > 0){
+            tp = $tipo.code+";";           
+        }
+        
+        Generator.addCode(Generator.typedef($IDENT.text, tp));
      };
 
 
@@ -121,13 +127,22 @@ variavel
             $t = $tipo.val;
             $names.add($IDENT.text);
             $names.addAll($mais_var.nomes);
-            Generator.declareVariable($IDENT.text, $tipo.val, $dimensao.text);
             
-            for(int i=0; i<$mais_var.nomes.size();i++){
-               String n = $mais_var.nomes.get(i);
-               String dim = $mais_var.dims.get(i);
-               Generator.declareVariable(n, $tipo.val, dim);                 
+            if($tipo.code.length() > 0){
+                ArrayList<String> nomes = new ArrayList<>($mais_var.nomes);
+                nomes.add($IDENT.text);
+                Generator.declareVariablesStruct(nomes, $tipo.code);      
+            }else{
+                Generator.declareVariable($IDENT.text, $tipo.val, $dimensao.text);
+                
+                for(int i=0; i<$mais_var.nomes.size();i++){
+                    String n = $mais_var.nomes.get(i);
+                    String dim = $mais_var.dims.get(i);
+                    Generator.declareVariable(n, $tipo.val, dim);                 
+                }
             }
+            
+            
          };
 
 /*6. Extens�o da lista de vari�veis*/
@@ -177,12 +192,13 @@ dimensao: (LBRACKET exp_aritmetica RBRACKET)*;
 
 /*11.*/
 tipo
-    returns [ String val ]
-    @init{ $val = ""; }
+    returns [ String val, String code ]
+    @init{ $val = ""; $code = ""; }
     :
     registro {
               $val=$registro.val;
               /*match de string da definicao de registro*/
+              $code = $registro.code;
               } |
     tipo_estendido { $val=$tipo_estendido.val; };
 
