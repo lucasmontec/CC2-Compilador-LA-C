@@ -106,6 +106,8 @@ declaracao_local
         else
           top().addToken($IDENT.text, $tipo.val);
         $val = $tipo.val;
+        
+        Generator.addCode(Generator.typedef($IDENT.text, "todo"));
      };
 
 

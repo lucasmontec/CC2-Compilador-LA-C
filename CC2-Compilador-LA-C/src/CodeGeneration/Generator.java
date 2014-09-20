@@ -405,4 +405,10 @@ public class Generator {
                 
     }
     
+    private static String typedef(String nomeCustom, String tipo){
+        String flavia = "";
+        flavia+= "typedef "+converteTipo(tipo)+" "+nomeCustom+";";
+        return flavia;
+    }
+    
 }
