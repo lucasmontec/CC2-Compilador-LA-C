@@ -6,6 +6,7 @@
 package CodeGeneration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -298,4 +299,79 @@ public class Generator {
     public static void printCode() {
         System.out.println(code);
     }
+
+    public static String caseCondition(
+            String expression,
+            ArrayList<String> caseData,
+            ArrayList<String> caseCode,
+            String optionalElseDefault) {
+
+        String code = "";
+        code += ident;
+        code += "switch(" + expression + "){\n";
+        enterScope();
+
+        //Generate each case
+        for (int i = 0; i < caseData.size(); i++) {
+            //Split subcases caso 1..7, 10, -1 :
+            for (String s : caseData.get(i).split(",")) {
+
+                //Complex subcase
+                if (s.contains("..")) {
+                    //Starting index
+                    int sindex = Integer.parseInt(s.split("\\.\\.")[0]);
+                    int findex = Integer.parseInt(s.split("\\.\\.")[1]);
+
+                    //Arruma a cagada do dev
+                    if (sindex > findex) {
+                        int aux = findex;
+                        findex = sindex;
+                        sindex = aux;
+                    }
+
+                    //Generate sequence cases
+                    for (int k = sindex; k <= findex; k++) {
+                        code += ident;
+                        code += "case " + k + ":\n";
+                        code += ident;
+                        code += caseCode.get(i) + "\n";
+                        code += ident;
+                        code += "break;\n";
+                    }
+                } //Simple subcase
+                else {
+                    code += ident;
+                    code += "case " + s + ":\n";
+                    code += ident;
+                    code += caseCode.get(i) + "\n";
+                    code += ident;
+                    code += "break;\n";
+                }
+            }
+        }
+
+        //Default block
+        if (optionalElseDefault != null && optionalElseDefault.length() > 0) {
+            code += ident;
+            code += "default:\n";
+            code += ident;
+            code += optionalElseDefault + "\n";
+            code += ident;
+            code += "break;\n";
+        }
+
+        leaveScope();
+
+        code += "}";
+        
+        return code;
+    }
+    
+    public static String attribPointer(String fullName, String dim, String expression){
+        String flavia = "";
+        flavia+= ident+"*"+fullName+dim+" = "+normalizeExpression(expression);
+        return flavia;
+        
+    }
+
 }

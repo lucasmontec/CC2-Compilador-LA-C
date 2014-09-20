@@ -462,7 +462,12 @@ cmd
    |   { push(new TokenSymbolTable("CASE")); }
        CASO exp_aritmetica SEJA selecao senao_opcional FIMCASO
        { 
-        $code = "case todo";
+        $code = Generator.caseCondition(
+            $exp_aritmetica.text,
+            $selecao.caseData,
+            $selecao.caseCode,
+            $senao_opcional.val
+            );
         pop();
        }
        
@@ -516,6 +521,8 @@ cmd
                 tokenType(fullToken)+" nao pode receber a expressao"+
                 " do tipo "+$expressao.val
                 ,$IDENT.getLine());
+                
+           $code = Generator.attribPointer($IDENT.text+ $outros_ident.fullName, $dimensao.text, $expressao.text);
        }
    |   IDENT chamada /*Chamada de funcao regra 30b*/
        /*Verifica se o token esta declarado e se os tipos batem*/
@@ -626,16 +633,37 @@ argumentos_opcional
         )?;
 
 /*32. */
-selecao:
-           constantes COLON comandos mais_selecao;
+selecao
+    returns [ ArrayList<String> caseData, ArrayList<String> caseCode ]
+    @init{ $caseData = new ArrayList<>(); $caseCode = new ArrayList<>(); }
+    :
+           constantes COLON comandos 
+           {
+                $caseData.add($constantes.data);
+                $caseCode.add($comandos.code);
+           }
+           
+           (constantes COLON comandos
+            {
+                $caseData.add($constantes.data);
+                $caseCode.add($comandos.code); 
+            })*
+           
+    ;
 
 /*33.*/
-mais_selecao:
-                selecao?;
+/*mais_selecao:
+                selecao?;*/
 
 /*34. Lista de constantes*/
-constantes:
-              numero_intervalo mais_constantes;
+constantes 
+    returns [ String data ]
+    @init{ $data = ""; }
+    :
+              numero_intervalo mais_constantes 
+              { $data += $numero_intervalo.text + $mais_constantes.text; }
+    ;
+              
 
 /*35. */
 mais_constantes:
@@ -1056,7 +1084,8 @@ NameChar
    | '_';
 fragment
 NameStartChar
-   : [a-zA-Z];
+   : [a-zA-Z]
+   | '_';
 
 /*String*/
 CADEIA: '"' (~[\r\n"] | '""')* '"' ; 

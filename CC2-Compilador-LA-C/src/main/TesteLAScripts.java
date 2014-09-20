@@ -56,7 +56,7 @@ public class TesteLAScripts {
             + "    i <- i + 1\n"
             + "  fim_enquanto\n"
             + "fim_algoritmo";
-    
+
     public static String algoritmo_5b = "algoritmo\n"
             + "  declare i: inteiro\n"
             + "  i <- 1\n"
@@ -90,6 +90,17 @@ public class TesteLAScripts {
             + "  \n"
             + "    x <- (( verdadeiro ou falso ) e verdadeiro ) ou demonio(falso, 50)\n"
             + "    escreva(x)\n"
+            + "fim_algoritmo";
+
+    public static String algoritmo_8
+            = "algoritmo\n"
+            + "  caso 2 seja\n"
+            + "  0..1: escreva(\"ERRO\")\n"
+            + "  2: escreva(\"OK\")\n"
+            + "  3..100: escreva(\"ERRO\")\n"
+            + "  senao\n"
+            + "    escreva(\"ERRO\")\n"
+            + "  fim_caso\n"
             + "fim_algoritmo";
 
     public static String algoritmo_1_erro_semantico
