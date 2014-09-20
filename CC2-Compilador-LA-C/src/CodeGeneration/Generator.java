@@ -35,7 +35,7 @@ public class Generator {
         code.append(cd);
     }
 
-    private static String normalizeExpression(String inputExp) {
+    public static String normalizeExpression(String inputExp) {
         String result = inputExp;
         Pattern equalPattern = Pattern.compile("[^<>](=)");
 
@@ -121,7 +121,6 @@ public class Generator {
 
         code.append("(");
         if (names.size() > 0) {
-            System.out.println(names.get(0));
             aux = makeVariable(names.get(0), types.get(0), "").replace(";", "");
             code.append(aux);
             for (int i = 1; i < names.size(); i++) {
@@ -266,7 +265,7 @@ public class Generator {
                 blob = "char " + nome + vec + "[150];";
                 break;
             case "logico":
-                blob = "bool " + nome + vec + ";";
+                blob = "int " + nome + vec + ";";
                 break;
             default:
                 /*TODO struct e tipos custom*/

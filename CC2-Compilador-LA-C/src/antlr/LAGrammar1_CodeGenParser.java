@@ -2150,7 +2150,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				            if(erro){
 				              error("Retorne em local inadequado", ((CmdContext)_localctx).RETORNE.getLine());       
 				            }
-				            Generator.addCode((((CmdContext)_localctx).expressao!=null?_input.getText(((CmdContext)_localctx).expressao.start,((CmdContext)_localctx).expressao.stop):null));
+				           ((CmdContext)_localctx).code =  "return " + Generator.normalizeExpression((((CmdContext)_localctx).expressao!=null?_input.getText(((CmdContext)_localctx).expressao.start,((CmdContext)_localctx).expressao.stop):null)) + ";";
 				       
 				}
 				break;

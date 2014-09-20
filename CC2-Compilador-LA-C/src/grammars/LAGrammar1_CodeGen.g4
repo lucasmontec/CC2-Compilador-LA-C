@@ -543,7 +543,7 @@ cmd
             if(erro){
               error("Retorne em local inadequado", $RETORNE.getLine());       
             }
-            //Generator.addCode($expressao.text);
+           $code = "return " + Generator.normalizeExpression($expressao.text) + ";";
        }/*FIM-LUCCAS*/
    ;
      
