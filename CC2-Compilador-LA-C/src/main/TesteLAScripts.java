@@ -57,7 +57,8 @@ public class TesteLAScripts {
             + "  fim_enquanto\n"
             + "fim_algoritmo";
 
-    public static String algoritmo_5b = "algoritmo\n"
+    public static String algoritmo_5b = "constante bagulho :inteiro = 5"
+            + "algoritmo\n"
             + "  declare i: inteiro\n"
             + "  i <- 1\n"
             + "  enquanto i = 5 faca\n"

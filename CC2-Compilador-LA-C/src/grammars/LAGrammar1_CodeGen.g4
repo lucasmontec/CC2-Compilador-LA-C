@@ -95,6 +95,8 @@ declaracao_local
         else
           top().addToken($IDENT.text, $tipo_basico.val);
         $val = $tipo_basico.val; 
+        
+        Generator.addCode(Generator.declCte($IDENT.text, $tipo_basico.val, $valor_constante.text));
      }      
     | TIPO IDENT COLON tipo
      {

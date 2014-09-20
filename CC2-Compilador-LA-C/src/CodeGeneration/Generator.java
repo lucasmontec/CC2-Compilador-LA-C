@@ -338,5 +338,36 @@ public class Generator {
         return flavia;
         
     }
-
+    
+    public static String declCte(String nome, String tipo, String valor){
+        String flavia = "";
+        
+        flavia+= ident+"const "+converteTipo(tipo)+" "+nome +"="+valor+";\n";
+        return flavia;
+    }
+    
+    private static String converteTipo(String tipo){
+        String blob;
+        switch (tipo) {
+            case "inteiro":
+                blob = "int";
+                break;
+            case "real":
+                blob = "float";
+                break;
+            case "literal":
+                blob = "char[150]";
+                break;
+            case "logico":
+                blob = "int";
+                break;
+            default:
+                /*TODO struct e tipos custom*/
+                blob = "todo";
+                break;
+        } 
+        return blob;
+                
+    }
+    
 }

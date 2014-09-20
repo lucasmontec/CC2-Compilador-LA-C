@@ -375,6 +375,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				        else
 				          top().addToken((((Declaracao_localContext)_localctx).IDENT!=null?((Declaracao_localContext)_localctx).IDENT.getText():null), ((Declaracao_localContext)_localctx).tipo_basico.val);
 				        ((Declaracao_localContext)_localctx).val =  ((Declaracao_localContext)_localctx).tipo_basico.val; 
+				        
+				        Generator.addCode(Generator.declCte((((Declaracao_localContext)_localctx).IDENT!=null?((Declaracao_localContext)_localctx).IDENT.getText():null), ((Declaracao_localContext)_localctx).tipo_basico.val, (((Declaracao_localContext)_localctx).valor_constante!=null?_input.getText(((Declaracao_localContext)_localctx).valor_constante.start,((Declaracao_localContext)_localctx).valor_constante.stop):null)));
 				     
 				}
 				break;
