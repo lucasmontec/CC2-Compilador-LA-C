@@ -6,6 +6,7 @@
 package CodeGeneration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -35,33 +36,33 @@ public class Generator {
         code.append(cd);
     }
 
-    private static String normalizeExpression(String inputExp){
+    private static String normalizeExpression(String inputExp) {
         String result = inputExp;
         Pattern equalPattern = Pattern.compile("[^<>](=)");
-        
+
         Matcher m = equalPattern.matcher(result);
         while (m.find()) {
             String s = m.group();
             result = result.replace(s, s.replace("=", "=="));
         }
-        
+
         return result
                 .replace(" ou ", " || ").replace(" e ", " && ")
-                .replace("nao","!").replace("verdadeiro", "1")
+                .replace("nao", "!").replace("verdadeiro", "1")
                 .replace("falso", "0");
     }
-    
-    public static String attrib(String id, String expression){
+
+    public static String attrib(String id, String expression) {
         String res = "";
         res += ident;
-        res += id+" = "+normalizeExpression(expression)+";";
+        res += id + " = " + normalizeExpression(expression) + ";";
         return res;
     }
-    
-    public static String whileLoop(String expression, String code){
+
+    public static String whileLoop(String expression, String code) {
         String res = "";
         res += ident;
-        res += "while("+normalizeExpression(expression)+"){\n";
+        res += "while(" + normalizeExpression(expression) + "){\n";
         enterScope();
         res += code;
         leaveScope();
@@ -69,8 +70,8 @@ public class Generator {
         res += "}\n";
         return res;
     }
-    
-    public static String doWhileLoop(String expression, String code){
+
+    public static String doWhileLoop(String expression, String code) {
         String res = "";
         res += ident;
         res += "do{\n";
@@ -78,10 +79,10 @@ public class Generator {
         res += code;
         leaveScope();
         res += ident;
-        res += "}while("+normalizeExpression(expression)+");\n";
+        res += "}while(" + normalizeExpression(expression) + ");\n";
         return res;
     }
-    
+
     public static String forLoop(String counter, String expIni, String expFim,
             String foreignCode) {
         StringBuilder code = new StringBuilder();
@@ -104,7 +105,7 @@ public class Generator {
         code.append("}");
         return code.toString();
     }
-    
+
     public static String write(ArrayList<String> names, ArrayList<String> types) {
         StringBuilder code = new StringBuilder();
         code.append(ident);
@@ -112,20 +113,20 @@ public class Generator {
         String mods = "\"";
         //Collections.reverse(names);
         for (String e : types) {
-            mods += mod(e)+" ";
+            mods += mod(e) + " ";
         }
-        mods = mods.trim()+"\"";
+        mods = mods.trim() + "\"";
         code.append(mods);
         String vals = "";
         //Collections.reverse(names);
         for (String e : names) {
-            vals += ","+e;
+            vals += "," + e;
         }
         code.append(vals);
         code.append(");");
         return code.toString();
     }
-    
+
     public static String read(HashMap<String, String> nameToType) {
         StringBuilder code = new StringBuilder();
         code.append(ident);
@@ -134,15 +135,15 @@ public class Generator {
         ArrayList<String> names = new ArrayList<>(nameToType.values());
         Collections.reverse(names);
         for (String e : names) {
-            mods += mod(e)+" ";
+            mods += mod(e) + " ";
         }
-        mods = mods.trim()+"\"";
+        mods = mods.trim() + "\"";
         code.append(mods);
         String vals = "";
         names = new ArrayList<>(nameToType.keySet());
         Collections.reverse(names);
         for (String e : names) {
-            vals += ",&"+e;
+            vals += ",&" + e;
         }
         code.append(vals);
         code.append(");");
@@ -217,7 +218,7 @@ public class Generator {
         }
     }
 
-    private static String makeVariable(String nome, String tipo, String vec){
+    private static String makeVariable(String nome, String tipo, String vec) {
         String blob = "";
         switch (tipo) {
             case "inteiro":
@@ -239,7 +240,7 @@ public class Generator {
         }
         return blob;
     }
-    
+
     public static void reset() {
         code = new StringBuilder();
     }
@@ -263,4 +264,70 @@ public class Generator {
     public static void printCode() {
         System.out.println(code);
     }
+
+    public static String caseCondition(
+            String expression,
+            ArrayList<String> caseData,
+            ArrayList<String> caseCode,
+            String optionalElseDefault) {
+
+        String code = "";
+        code += ident;
+        code += "switch(" + expression + "){\n";
+        enterScope();
+
+        //Generate each case
+        for (int i = 0; i < caseData.size(); i++) {
+            //Split subcases caso 1..7, 10, -1 :
+            for (String s : caseData.get(i).split(",")) {
+
+                //Complex subcase
+                if (s.contains("..")) {
+                    //Starting index
+                    int sindex = Integer.parseInt(s.split("\\.\\.")[0]);
+                    int findex = Integer.parseInt(s.split("\\.\\.")[1]);
+
+                    //Arruma a cagada do dev
+                    if (sindex > findex) {
+                        int aux = findex;
+                        findex = sindex;
+                        sindex = aux;
+                    }
+
+                    //Generate sequence cases
+                    for (int k = sindex; k <= findex; k++) {
+                        code += ident;
+                        code += "case " + k + ":\n";
+                        code += ident;
+                        code += caseCode.get(i) + "\n";
+                        code += ident;
+                        code += "break;\n";
+                    }
+                } //Simple subcase
+                else {
+                    code += ident;
+                    code += "case " + s + ":\n";
+                    code += ident;
+                    code += caseCode.get(i) + "\n";
+                    code += ident;
+                    code += "break;\n";
+                }
+            }
+        }
+
+        //Default block
+        if (optionalElseDefault != null && optionalElseDefault.length() > 0) {
+            code += ident;
+            code += "default:\n";
+            code += ident;
+            code += optionalElseDefault + "\n";
+            code += ident;
+            code += "break;\n";
+        }
+
+        leaveScope();
+
+        return code;
+    }
+
 }
