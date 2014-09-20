@@ -7,8 +7,8 @@
 package main;
 
 
-import antlr.LAGrammar1Lexer;
-import antlr.LAGrammar1Parser;
+import antlr.LAGrammar1_CodeGenLexer;
+import antlr.LAGrammar1_CodeGenParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -20,13 +20,13 @@ import org.antlr.v4.runtime.CommonTokenStream;
 public class Main {
     public static void main(String ...args){
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritimo_1_erro_semantico);
+        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritmo_1_erro_semantico);
         //Lexer para gerar os tokens
-        LAGrammar1Lexer lexer = new LAGrammar1Lexer(inputStream);
+        LAGrammar1_CodeGenLexer lexer = new LAGrammar1_CodeGenLexer(inputStream);
         //Estrutura comum de stream de tokens
         CommonTokenStream stream = new CommonTokenStream(lexer);
         //Parser do programa
-        LAGrammar1Parser parser = new LAGrammar1Parser(stream);
+        LAGrammar1_CodeGenParser parser = new LAGrammar1_CodeGenParser(stream);
         
         //Chama o token inicial
         parser.programa();

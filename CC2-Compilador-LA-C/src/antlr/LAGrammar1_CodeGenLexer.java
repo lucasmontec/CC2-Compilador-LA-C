@@ -1,9 +1,10 @@
-// Generated from /home/joaovitor/NetBeansProjects/CC2-Compilador-LA-C/CC2-Compilador-LA-C/src/grammars/LAGrammar1.g4 by ANTLR 4.1
+// Generated from /home/joaovitor/NetBeansProjects/CC2-Compilador-LA-C/CC2-Compilador-LA-C/src/grammars/LAGrammar1_CodeGen.g4 by ANTLR 4.1
 package antlr;
 
   import Semantic.TokenSymbol;
   import Semantic.TokenSymbolTable;
   import static Semantic.SemanticUtil.*;
+  import CodeGeneration.Generator;
   import java.util.*;
 
 import org.antlr.v4.runtime.Lexer;
@@ -16,7 +17,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class LAGrammar1Lexer extends Lexer {
+public class LAGrammar1_CodeGenLexer extends Lexer {
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -61,13 +62,13 @@ public class LAGrammar1Lexer extends Lexer {
 	};
 
 
-	public LAGrammar1Lexer(CharStream input) {
+	public LAGrammar1_CodeGenLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "LAGrammar1.g4"; }
+	public String getGrammarFileName() { return "LAGrammar1_CodeGen.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

@@ -1,6 +1,6 @@
 package main;
 
-import Semantic.SemanticUtil;
+/*import Semantic.SemanticUtil;
 import antlr.LAGrammar1Lexer;
 import antlr.LAGrammar1Parser;
 import java.io.File;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.CommonTokenStream;*/
 
 /**
  *
@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
  */
 public class testFileList {
 
-    static File dir = new File("testFiles/sem_erro");
+    /*static File dir = new File("testFiles/sem_erro");
     //static File dir = new File("testFiles/erro_semantico");
     //static File dir = new File("testFiles/erro_sintatico");
     static ArrayList<File> algoritmos;
@@ -71,5 +71,5 @@ public class testFileList {
         parser.programa();
         
         return parser.getNumberOfSyntaxErrors();
-    }
+    }*/
 }
