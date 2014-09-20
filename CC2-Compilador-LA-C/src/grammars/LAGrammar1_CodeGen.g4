@@ -17,9 +17,10 @@ programa:
             { 
              Generator.includes();
              push(new TokenSymbolTable("decl_globais"));
-             Generator.startAlgorithm();
             }
-        declaracoes ALGORITMO corpo
+        declaracoes
+        {Generator.startAlgorithm();}
+        ALGORITMO corpo
             /*{ printSemanticTable(); }*/
             FIM_ALGORITMO
             {
@@ -262,7 +263,8 @@ registro
     ;
 
 /*19. Procedimentos globais*/
-declaracao_global:
+declaracao_global
+    :
       PROCEDIMENTO IDENT 
         { push(new TokenSymbolTable("PROC")); }
         LPARENTHESIS parametros_opcional
@@ -288,9 +290,12 @@ declaracao_global:
             printSemanticTable();
             System.out.println("*******************");
             System.out.println("*******************");*/
+            String code = Generator.method($IDENT.text, $parametros_opcional.nomeList, 
+                $parametros_opcional.tipoList, false, "", $comandos.code);
+            Generator.addCode(code);
             pop();
             top().addToken($IDENT.text, "PROC");
-            registerSignature($IDENT.text, $parametros_opcional.val); 
+            registerSignature($IDENT.text, $parametros_opcional.val);
         }
       
       | FUNCAO IDENT
@@ -313,6 +318,9 @@ declaracao_global:
         }
         RPARENTHESIS COLON tipo_estendido declaracoes_locais comandos FIM_FUNCAO
         { 
+            String code = Generator.method($IDENT.text, $parametros_opcional.nomeList, 
+                $parametros_opcional.tipoList, true, $tipo_estendido.val, $comandos.code);
+            Generator.addCode(code);
             pop(); 
             top().addToken($IDENT.text, $tipo_estendido.val);
             registerSignature($IDENT.text, $parametros_opcional.val);
@@ -321,28 +329,41 @@ declaracao_global:
 
 /*20. Parametros 0 ou mais*/
 parametros_opcional
-    returns [ HashMap<String,String> nomes, String val ]
+    returns [ HashMap<String,String> nomes, String val, ArrayList<String> nomeList, ArrayList<String> tipoList]
     @init{
         $val = ""; 
         $nomes = new HashMap<>();
+        $nomeList = new ArrayList<>();
+        $tipoList = new ArrayList<>();
     }
-    : (parametro{$val = $parametro.val; $nomes = $parametro.nomes;})?;
+    : (parametro{
+        $val = $parametro.val; 
+        $nomes = $parametro.nomes;
+        $nomeList = $parametro.nomeList;
+        $tipoList = $parametro.tipoList;
+    })?;
 
 /*21.Parametro*/
 parametro
-    returns [ HashMap<String,String> nomes, String val ]
+    returns [ HashMap<String,String> nomes, String val, ArrayList<String> nomeList, ArrayList<String> tipoList]
     @init{
             $val = "";
             $nomes = new HashMap<>();
+            $nomeList = new ArrayList<>();
+            $tipoList = new ArrayList<>();
           }
     :
       var_opcional identificador mais_ident COLON tipo_estendido
       {
          $val += $tipo_estendido.val;
          $nomes.put($identificador.nome,$tipo_estendido.val);
+         $nomeList.add($identificador.text);
+         $tipoList.add($tipo_estendido.val);
          for(String s: $mais_ident.idents){
             $val += "," + $tipo_estendido.val;
             $nomes.put(s,$tipo_estendido.val);
+            $nomeList.add($identificador.text);
+            $tipoList.add($tipo_estendido.val);
          }
       }
       /*mais_parametros*/
@@ -352,9 +373,13 @@ parametro
        {
             $val += $tipo_estendido.val;
             $nomes.put($identificador.nome,$tipo_estendido.val);
+            $nomeList.add($identificador.text);
+            $tipoList.add($tipo_estendido.val);
             for(String s: $mais_ident.idents){
                $val += "," + $tipo_estendido.val;
                $nomes.put(s,$tipo_estendido.val);
+               $nomeList.add($identificador.text);
+               $tipoList.add($tipo_estendido.val);
             }
        }
       )*
@@ -518,6 +543,7 @@ cmd
             if(erro){
               error("Retorne em local inadequado", $RETORNE.getLine());       
             }
+            //Generator.addCode($expressao.text);
        }/*FIM-LUCCAS*/
    ;
      

@@ -20,7 +20,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 public class Main {
     public static void main(String ...args){
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritmo_1_erro_semantico);
+        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritmo_7);
         //Lexer para gerar os tokens
         LAGrammar1_CodeGenLexer lexer = new LAGrammar1_CodeGenLexer(inputStream);
         //Estrutura comum de stream de tokens
