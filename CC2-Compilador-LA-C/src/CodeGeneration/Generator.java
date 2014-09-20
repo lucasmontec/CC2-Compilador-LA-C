@@ -207,7 +207,7 @@ public class Generator {
         }
         return modifier;
     }
-
+    
     public static String condition(String conditionExpression, String mainCode,
             String optionalElse) {
         StringBuilder code = new StringBuilder();
@@ -381,7 +381,7 @@ public class Generator {
         return flavia;
     }
     
-    private static String converteTipo(String tipo){
+    public static String converteTipo(String tipo){
         String blob;
         switch (tipo) {
             case "inteiro":

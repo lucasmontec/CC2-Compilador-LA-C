@@ -1,4 +1,4 @@
-// Generated from /home/joaovitor/NetBeansProjects/CC2-Compilador-LA-C/CC2-Compilador-LA-C/src/grammars/LAGrammar1_CodeGen.g4 by ANTLR 4.1
+// Generated from C:\Users\Luccas\Documents\NetBeansProjects\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1_CodeGen.g4 by ANTLR 4.1
 package antlr;
 
   import Semantic.TokenSymbol;
@@ -273,24 +273,24 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Tipo_basicoContext tipo_basico;
 		public Valor_constanteContext valor_constante;
 		public TipoContext tipo;
-		public TerminalNode TIPO() { return getToken(LAGrammar1_CodeGenParser.TIPO, 0); }
-		public Tipo_basicoContext tipo_basico() {
-			return getRuleContext(Tipo_basicoContext.class,0);
-		}
-		public TerminalNode CONSTANTE() { return getToken(LAGrammar1_CodeGenParser.CONSTANTE, 0); }
 		public TerminalNode EQUALS() { return getToken(LAGrammar1_CodeGenParser.EQUALS, 0); }
-		public TerminalNode DECLARE() { return getToken(LAGrammar1_CodeGenParser.DECLARE, 0); }
-		public TipoContext tipo() {
-			return getRuleContext(TipoContext.class,0);
-		}
-		public Valor_constanteContext valor_constante() {
-			return getRuleContext(Valor_constanteContext.class,0);
-		}
 		public VariavelContext variavel() {
 			return getRuleContext(VariavelContext.class,0);
 		}
+		public TerminalNode DECLARE() { return getToken(LAGrammar1_CodeGenParser.DECLARE, 0); }
+		public TerminalNode TIPO() { return getToken(LAGrammar1_CodeGenParser.TIPO, 0); }
+		public TipoContext tipo() {
+			return getRuleContext(TipoContext.class,0);
+		}
 		public TerminalNode COLON() { return getToken(LAGrammar1_CodeGenParser.COLON, 0); }
+		public Valor_constanteContext valor_constante() {
+			return getRuleContext(Valor_constanteContext.class,0);
+		}
+		public TerminalNode CONSTANTE() { return getToken(LAGrammar1_CodeGenParser.CONSTANTE, 0); }
 		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
+		public Tipo_basicoContext tipo_basico() {
+			return getRuleContext(Tipo_basicoContext.class,0);
+		}
 		public Declaracao_localContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -418,9 +418,6 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public DimensaoContext dimensao;
 		public Mais_varContext mais_var;
 		public TipoContext tipo;
-		public Mais_varContext mais_var() {
-			return getRuleContext(Mais_varContext.class,0);
-		}
 		public DimensaoContext dimensao() {
 			return getRuleContext(DimensaoContext.class,0);
 		}
@@ -428,6 +425,9 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			return getRuleContext(TipoContext.class,0);
 		}
 		public TerminalNode COLON() { return getToken(LAGrammar1_CodeGenParser.COLON, 0); }
+		public Mais_varContext mais_var() {
+			return getRuleContext(Mais_varContext.class,0);
+		}
 		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
 		public VariavelContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -492,13 +492,13 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			return getRuleContexts(DimensaoContext.class);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(LAGrammar1_CodeGenParser.COMMA); }
-		public List<TerminalNode> IDENT() { return getTokens(LAGrammar1_CodeGenParser.IDENT); }
 		public TerminalNode IDENT(int i) {
 			return getToken(LAGrammar1_CodeGenParser.IDENT, i);
 		}
 		public TerminalNode COMMA(int i) {
 			return getToken(LAGrammar1_CodeGenParser.COMMA, i);
 		}
+		public List<TerminalNode> IDENT() { return getTokens(LAGrammar1_CodeGenParser.IDENT); }
 		public Mais_varContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -722,20 +722,20 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	}
 
 	public static class DimensaoContext extends ParserRuleContext {
-		public List<Exp_aritmeticaContext> exp_aritmetica() {
-			return getRuleContexts(Exp_aritmeticaContext.class);
+		public List<TerminalNode> RBRACKET() { return getTokens(LAGrammar1_CodeGenParser.RBRACKET); }
+		public TerminalNode LBRACKET(int i) {
+			return getToken(LAGrammar1_CodeGenParser.LBRACKET, i);
+		}
+		public TerminalNode RBRACKET(int i) {
+			return getToken(LAGrammar1_CodeGenParser.RBRACKET, i);
 		}
 		public Exp_aritmeticaContext exp_aritmetica(int i) {
 			return getRuleContext(Exp_aritmeticaContext.class,i);
 		}
 		public List<TerminalNode> LBRACKET() { return getTokens(LAGrammar1_CodeGenParser.LBRACKET); }
-		public TerminalNode RBRACKET(int i) {
-			return getToken(LAGrammar1_CodeGenParser.RBRACKET, i);
+		public List<Exp_aritmeticaContext> exp_aritmetica() {
+			return getRuleContexts(Exp_aritmeticaContext.class);
 		}
-		public TerminalNode LBRACKET(int i) {
-			return getToken(LAGrammar1_CodeGenParser.LBRACKET, i);
-		}
-		public List<TerminalNode> RBRACKET() { return getTokens(LAGrammar1_CodeGenParser.RBRACKET); }
 		public DimensaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -791,11 +791,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String val;
 		public RegistroContext registro;
 		public Tipo_estendidoContext tipo_estendido;
-		public RegistroContext registro() {
-			return getRuleContext(RegistroContext.class,0);
-		}
 		public Tipo_estendidoContext tipo_estendido() {
 			return getRuleContext(Tipo_estendidoContext.class,0);
+		}
+		public RegistroContext registro() {
+			return getRuleContext(RegistroContext.class,0);
 		}
 		public TipoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -858,11 +858,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class Mais_identContext extends ParserRuleContext {
 		public ArrayList<String> idents;
 		public IdentificadorContext identificador;
-		public IdentificadorContext identificador(int i) {
-			return getRuleContext(IdentificadorContext.class,i);
-		}
 		public List<IdentificadorContext> identificador() {
 			return getRuleContexts(IdentificadorContext.class);
+		}
+		public IdentificadorContext identificador(int i) {
+			return getRuleContext(IdentificadorContext.class,i);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(LAGrammar1_CodeGenParser.COMMA); }
 		public TerminalNode COMMA(int i) {
@@ -922,11 +922,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public HashMap<String, String> nomes;
 		public List<String> tipos;
 		public VariavelContext variavel;
-		public List<VariavelContext> variavel() {
-			return getRuleContexts(VariavelContext.class);
-		}
 		public VariavelContext variavel(int i) {
 			return getRuleContext(VariavelContext.class,i);
+		}
+		public List<VariavelContext> variavel() {
+			return getRuleContexts(VariavelContext.class);
 		}
 		public Mais_variaveisContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -986,10 +986,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Token INTEIRO;
 		public Token REAL;
 		public Token LOGICO;
-		public TerminalNode INTEIRO() { return getToken(LAGrammar1_CodeGenParser.INTEIRO, 0); }
-		public TerminalNode LITERAL() { return getToken(LAGrammar1_CodeGenParser.LITERAL, 0); }
-		public TerminalNode LOGICO() { return getToken(LAGrammar1_CodeGenParser.LOGICO, 0); }
 		public TerminalNode REAL() { return getToken(LAGrammar1_CodeGenParser.REAL, 0); }
+		public TerminalNode INTEIRO() { return getToken(LAGrammar1_CodeGenParser.INTEIRO, 0); }
+		public TerminalNode LOGICO() { return getToken(LAGrammar1_CodeGenParser.LOGICO, 0); }
+		public TerminalNode LITERAL() { return getToken(LAGrammar1_CodeGenParser.LITERAL, 0); }
 		public Tipo_basicoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1058,10 +1058,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String val;
 		public Tipo_basicoContext tipo_basico;
 		public Token IDENT;
+		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
 		public Tipo_basicoContext tipo_basico() {
 			return getRuleContext(Tipo_basicoContext.class,0);
 		}
-		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
 		public Tipo_basico_identContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1119,11 +1119,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String val;
 		public Ponteiros_opcionaisContext ponteiros_opcionais;
 		public Tipo_basico_identContext tipo_basico_ident;
-		public Tipo_basico_identContext tipo_basico_ident() {
-			return getRuleContext(Tipo_basico_identContext.class,0);
-		}
 		public Ponteiros_opcionaisContext ponteiros_opcionais() {
 			return getRuleContext(Ponteiros_opcionaisContext.class,0);
+		}
+		public Tipo_basico_identContext tipo_basico_ident() {
+			return getRuleContext(Tipo_basico_identContext.class,0);
 		}
 		public Tipo_estendidoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1164,11 +1164,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 
 	public static class Valor_constanteContext extends ParserRuleContext {
 		public String val;
-		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
-		public TerminalNode FALSO() { return getToken(LAGrammar1_CodeGenParser.FALSO, 0); }
 		public TerminalNode NUM_REAL() { return getToken(LAGrammar1_CodeGenParser.NUM_REAL, 0); }
 		public TerminalNode VERDADEIRO() { return getToken(LAGrammar1_CodeGenParser.VERDADEIRO, 0); }
 		public TerminalNode CADEIA() { return getToken(LAGrammar1_CodeGenParser.CADEIA, 0); }
+		public TerminalNode FALSO() { return getToken(LAGrammar1_CodeGenParser.FALSO, 0); }
+		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
 		public Valor_constanteContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1242,16 +1242,17 @@ public class LAGrammar1_CodeGenParser extends Parser {
 
 	public static class RegistroContext extends ParserRuleContext {
 		public String val;
+		public String code;
 		public VariavelContext variavel;
 		public Mais_variaveisContext mais_variaveis;
-		public TerminalNode FIM_REGISTRO() { return getToken(LAGrammar1_CodeGenParser.FIM_REGISTRO, 0); }
-		public VariavelContext variavel() {
-			return getRuleContext(VariavelContext.class,0);
-		}
-		public TerminalNode REGISTRO() { return getToken(LAGrammar1_CodeGenParser.REGISTRO, 0); }
 		public Mais_variaveisContext mais_variaveis() {
 			return getRuleContext(Mais_variaveisContext.class,0);
 		}
+		public TerminalNode REGISTRO() { return getToken(LAGrammar1_CodeGenParser.REGISTRO, 0); }
+		public VariavelContext variavel() {
+			return getRuleContext(VariavelContext.class,0);
+		}
+		public TerminalNode FIM_REGISTRO() { return getToken(LAGrammar1_CodeGenParser.FIM_REGISTRO, 0); }
 		public RegistroContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1269,7 +1270,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public final RegistroContext registro() throws RecognitionException {
 		RegistroContext _localctx = new RegistroContext(_ctx, getState());
 		enterRule(_localctx, 34, RULE_registro);
-		 ((RegistroContext)_localctx).val =  "$"; 
+		 ((RegistroContext)_localctx).val =  "$"; ((RegistroContext)_localctx).code =  ""; 
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1277,12 +1278,21 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			setState(263); ((RegistroContext)_localctx).variavel = variavel();
 			 _localctx.val += "[";
 			        for(String s: ((RegistroContext)_localctx).variavel.names)
-			            _localctx.val += s + ":" +((RegistroContext)_localctx).variavel.t+",";         
+			            _localctx.val += s + ":" +((RegistroContext)_localctx).variavel.t+",";
+			       
+			       _localctx.code += "struct{ \n";
+			       _localctx.code += "\t"+ Generator.converteTipo(((RegistroContext)_localctx).variavel.t) + " ";
+			       for(String s: ((RegistroContext)_localctx).variavel.names){
+			         _localctx.code += s + ",";
+			       }
+			       ((RegistroContext)_localctx).code =  _localctx.code.substring(0, _localctx.code.length() - 1)+ ";\n";
 			     
 			setState(265); ((RegistroContext)_localctx).mais_variaveis = mais_variaveis();
 			 
 			                     for(Map.Entry<String, String> e: ((RegistroContext)_localctx).mais_variaveis.nomes.entrySet()){                     
 			                        _localctx.val += ","+e.getKey()+":"+e.getValue();
+			                        
+			                        _localctx.code += Generator.converteTipo(e.getValue())+ " " + e.getKey() + ";\n";
 			                     }
 			                    
 			setState(267); match(FIM_REGISTRO);
@@ -1290,6 +1300,9 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			      _localctx.val += "]";
 			      /*Registra o tipo pra in-line*/
 			      top().addToken(_localctx.val,_localctx.val);
+			      
+			      _localctx.code += "}";
+			      System.out.println(_localctx.code);
 			      
 			}
 		}
@@ -1309,23 +1322,23 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Parametros_opcionalContext parametros_opcional;
 		public ComandosContext comandos;
 		public Tipo_estendidoContext tipo_estendido;
-		public TerminalNode FIM_PROCEDIMENTO() { return getToken(LAGrammar1_CodeGenParser.FIM_PROCEDIMENTO, 0); }
-		public Declaracoes_locaisContext declaracoes_locais() {
-			return getRuleContext(Declaracoes_locaisContext.class,0);
-		}
-		public TerminalNode PROCEDIMENTO() { return getToken(LAGrammar1_CodeGenParser.PROCEDIMENTO, 0); }
-		public TerminalNode FIM_FUNCAO() { return getToken(LAGrammar1_CodeGenParser.FIM_FUNCAO, 0); }
-		public TerminalNode FUNCAO() { return getToken(LAGrammar1_CodeGenParser.FUNCAO, 0); }
 		public Tipo_estendidoContext tipo_estendido() {
 			return getRuleContext(Tipo_estendidoContext.class,0);
 		}
+		public TerminalNode PROCEDIMENTO() { return getToken(LAGrammar1_CodeGenParser.PROCEDIMENTO, 0); }
+		public Declaracoes_locaisContext declaracoes_locais() {
+			return getRuleContext(Declaracoes_locaisContext.class,0);
+		}
+		public TerminalNode FIM_FUNCAO() { return getToken(LAGrammar1_CodeGenParser.FIM_FUNCAO, 0); }
+		public Parametros_opcionalContext parametros_opcional() {
+			return getRuleContext(Parametros_opcionalContext.class,0);
+		}
+		public TerminalNode FUNCAO() { return getToken(LAGrammar1_CodeGenParser.FUNCAO, 0); }
+		public TerminalNode COLON() { return getToken(LAGrammar1_CodeGenParser.COLON, 0); }
+		public TerminalNode FIM_PROCEDIMENTO() { return getToken(LAGrammar1_CodeGenParser.FIM_PROCEDIMENTO, 0); }
 		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
 		public ComandosContext comandos() {
 			return getRuleContext(ComandosContext.class,0);
-		}
-		public TerminalNode COLON() { return getToken(LAGrammar1_CodeGenParser.COLON, 0); }
-		public Parametros_opcionalContext parametros_opcional() {
-			return getRuleContext(Parametros_opcionalContext.class,0);
 		}
 		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
 		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
@@ -1516,34 +1529,34 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public IdentificadorContext identificador;
 		public Mais_identContext mais_ident;
 		public Tipo_estendidoContext tipo_estendido;
+		public List<Tipo_estendidoContext> tipo_estendido() {
+			return getRuleContexts(Tipo_estendidoContext.class);
+		}
+		public List<IdentificadorContext> identificador() {
+			return getRuleContexts(IdentificadorContext.class);
+		}
+		public Var_opcionalContext var_opcional(int i) {
+			return getRuleContext(Var_opcionalContext.class,i);
+		}
 		public IdentificadorContext identificador(int i) {
 			return getRuleContext(IdentificadorContext.class,i);
 		}
 		public List<Var_opcionalContext> var_opcional() {
 			return getRuleContexts(Var_opcionalContext.class);
 		}
-		public Var_opcionalContext var_opcional(int i) {
-			return getRuleContext(Var_opcionalContext.class,i);
-		}
-		public Tipo_estendidoContext tipo_estendido(int i) {
-			return getRuleContext(Tipo_estendidoContext.class,i);
-		}
-		public List<IdentificadorContext> identificador() {
-			return getRuleContexts(IdentificadorContext.class);
-		}
-		public List<TerminalNode> COMMA() { return getTokens(LAGrammar1_CodeGenParser.COMMA); }
 		public List<Mais_identContext> mais_ident() {
 			return getRuleContexts(Mais_identContext.class);
 		}
 		public TerminalNode COLON(int i) {
 			return getToken(LAGrammar1_CodeGenParser.COLON, i);
 		}
-		public List<Tipo_estendidoContext> tipo_estendido() {
-			return getRuleContexts(Tipo_estendidoContext.class);
-		}
+		public List<TerminalNode> COMMA() { return getTokens(LAGrammar1_CodeGenParser.COMMA); }
 		public List<TerminalNode> COLON() { return getTokens(LAGrammar1_CodeGenParser.COLON); }
 		public Mais_identContext mais_ident(int i) {
 			return getRuleContext(Mais_identContext.class,i);
+		}
+		public Tipo_estendidoContext tipo_estendido(int i) {
+			return getRuleContext(Tipo_estendidoContext.class,i);
 		}
 		public TerminalNode COMMA(int i) {
 			return getToken(LAGrammar1_CodeGenParser.COMMA, i);
@@ -1858,10 +1871,53 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public ChamadaContext chamada;
 		public AtribuicaoContext atribuicao;
 		public Token RETORNE;
-		public TerminalNode FIMCASO() { return getToken(LAGrammar1_CodeGenParser.FIMCASO, 0); }
+		public TerminalNode UP_HAT() { return getToken(LAGrammar1_CodeGenParser.UP_HAT, 0); }
 		public SelecaoContext selecao() {
 			return getRuleContext(SelecaoContext.class,0);
 		}
+		public Senao_opcionalContext senao_opcional() {
+			return getRuleContext(Senao_opcionalContext.class,0);
+		}
+		public TerminalNode FIMSE() { return getToken(LAGrammar1_CodeGenParser.FIMSE, 0); }
+		public Exp_aritmeticaContext exp_aritmetica(int i) {
+			return getRuleContext(Exp_aritmeticaContext.class,i);
+		}
+		public TerminalNode FIMENQUANTO() { return getToken(LAGrammar1_CodeGenParser.FIMENQUANTO, 0); }
+		public Outros_identContext outros_ident() {
+			return getRuleContext(Outros_identContext.class,0);
+		}
+		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
+		public TerminalNode ARROW() { return getToken(LAGrammar1_CodeGenParser.ARROW, 0); }
+		public TerminalNode FIMCASO() { return getToken(LAGrammar1_CodeGenParser.FIMCASO, 0); }
+		public TerminalNode ENQUANTO() { return getToken(LAGrammar1_CodeGenParser.ENQUANTO, 0); }
+		public ExpressaoContext expressao() {
+			return getRuleContext(ExpressaoContext.class,0);
+		}
+		public TerminalNode ATE() { return getToken(LAGrammar1_CodeGenParser.ATE, 0); }
+		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
+		public ComandosContext comandos() {
+			return getRuleContext(ComandosContext.class,0);
+		}
+		public TerminalNode RETORNE() { return getToken(LAGrammar1_CodeGenParser.RETORNE, 0); }
+		public TerminalNode LEIA() { return getToken(LAGrammar1_CodeGenParser.LEIA, 0); }
+		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
+		public TerminalNode FACA() { return getToken(LAGrammar1_CodeGenParser.FACA, 0); }
+		public Mais_identContext mais_ident() {
+			return getRuleContext(Mais_identContext.class,0);
+		}
+		public DimensaoContext dimensao() {
+			return getRuleContext(DimensaoContext.class,0);
+		}
+		public TerminalNode PARA() { return getToken(LAGrammar1_CodeGenParser.PARA, 0); }
+		public ChamadaContext chamada() {
+			return getRuleContext(ChamadaContext.class,0);
+		}
+		public AtribuicaoContext atribuicao() {
+			return getRuleContext(AtribuicaoContext.class,0);
+		}
+		public TerminalNode ENTAO() { return getToken(LAGrammar1_CodeGenParser.ENTAO, 0); }
+		public TerminalNode SE() { return getToken(LAGrammar1_CodeGenParser.SE, 0); }
+		public TerminalNode ESCREVA() { return getToken(LAGrammar1_CodeGenParser.ESCREVA, 0); }
 		public IdentificadorContext identificador() {
 			return getRuleContext(IdentificadorContext.class,0);
 		}
@@ -1869,54 +1925,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Mais_expressaoContext mais_expressao() {
 			return getRuleContext(Mais_expressaoContext.class,0);
 		}
-		public TerminalNode RETORNE() { return getToken(LAGrammar1_CodeGenParser.RETORNE, 0); }
-		public ChamadaContext chamada() {
-			return getRuleContext(ChamadaContext.class,0);
-		}
-		public TerminalNode ENQUANTO() { return getToken(LAGrammar1_CodeGenParser.ENQUANTO, 0); }
-		public Exp_aritmeticaContext exp_aritmetica(int i) {
-			return getRuleContext(Exp_aritmeticaContext.class,i);
-		}
-		public AtribuicaoContext atribuicao() {
-			return getRuleContext(AtribuicaoContext.class,0);
-		}
-		public TerminalNode CASO() { return getToken(LAGrammar1_CodeGenParser.CASO, 0); }
-		public DimensaoContext dimensao() {
-			return getRuleContext(DimensaoContext.class,0);
-		}
-		public TerminalNode UP_HAT() { return getToken(LAGrammar1_CodeGenParser.UP_HAT, 0); }
-		public TerminalNode FIMENQUANTO() { return getToken(LAGrammar1_CodeGenParser.FIMENQUANTO, 0); }
-		public TerminalNode ESCREVA() { return getToken(LAGrammar1_CodeGenParser.ESCREVA, 0); }
-		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
-		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
-		public TerminalNode LEIA() { return getToken(LAGrammar1_CodeGenParser.LEIA, 0); }
-		public TerminalNode FIMSE() { return getToken(LAGrammar1_CodeGenParser.FIMSE, 0); }
-		public Outros_identContext outros_ident() {
-			return getRuleContext(Outros_identContext.class,0);
-		}
-		public ExpressaoContext expressao() {
-			return getRuleContext(ExpressaoContext.class,0);
-		}
-		public TerminalNode FACA() { return getToken(LAGrammar1_CodeGenParser.FACA, 0); }
-		public TerminalNode ARROW() { return getToken(LAGrammar1_CodeGenParser.ARROW, 0); }
-		public Mais_identContext mais_ident() {
-			return getRuleContext(Mais_identContext.class,0);
-		}
-		public TerminalNode SEJA() { return getToken(LAGrammar1_CodeGenParser.SEJA, 0); }
-		public TerminalNode ENTAO() { return getToken(LAGrammar1_CodeGenParser.ENTAO, 0); }
-		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
-		public TerminalNode SE() { return getToken(LAGrammar1_CodeGenParser.SE, 0); }
-		public TerminalNode ATE() { return getToken(LAGrammar1_CodeGenParser.ATE, 0); }
 		public List<Exp_aritmeticaContext> exp_aritmetica() {
 			return getRuleContexts(Exp_aritmeticaContext.class);
 		}
-		public Senao_opcionalContext senao_opcional() {
-			return getRuleContext(Senao_opcionalContext.class,0);
-		}
-		public ComandosContext comandos() {
-			return getRuleContext(ComandosContext.class,0);
-		}
-		public TerminalNode PARA() { return getToken(LAGrammar1_CodeGenParser.PARA, 0); }
+		public TerminalNode SEJA() { return getToken(LAGrammar1_CodeGenParser.SEJA, 0); }
+		public TerminalNode CASO() { return getToken(LAGrammar1_CodeGenParser.CASO, 0); }
 		public CmdContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2183,13 +2196,13 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public ArrayList<String> names;
 		public ArrayList<String> types;
 		public ExpressaoContext expressao;
-		public ExpressaoContext expressao(int i) {
-			return getRuleContext(ExpressaoContext.class,i);
-		}
 		public List<ExpressaoContext> expressao() {
 			return getRuleContexts(ExpressaoContext.class);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(LAGrammar1_CodeGenParser.COMMA); }
+		public ExpressaoContext expressao(int i) {
+			return getRuleContext(ExpressaoContext.class,i);
+		}
 		public TerminalNode COMMA(int i) {
 			return getToken(LAGrammar1_CodeGenParser.COMMA, i);
 		}
@@ -2250,10 +2263,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class Senao_opcionalContext extends ParserRuleContext {
 		public String val;
 		public ComandosContext comandos;
+		public TerminalNode SENAO() { return getToken(LAGrammar1_CodeGenParser.SENAO, 0); }
 		public ComandosContext comandos() {
 			return getRuleContext(ComandosContext.class,0);
 		}
-		public TerminalNode SENAO() { return getToken(LAGrammar1_CodeGenParser.SENAO, 0); }
 		public Senao_opcionalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2314,8 +2327,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Outros_identContext outros_ident() {
 			return getRuleContext(Outros_identContext.class,0);
 		}
-		public TerminalNode ARROW() { return getToken(LAGrammar1_CodeGenParser.ARROW, 0); }
 		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
+		public TerminalNode ARROW() { return getToken(LAGrammar1_CodeGenParser.ARROW, 0); }
 		public AtribuicaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2381,10 +2394,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class ChamadaContext extends ParserRuleContext {
 		public String val;
 		public Argumentos_opcionalContext argumentos_opcional;
+		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
 		public Argumentos_opcionalContext argumentos_opcional() {
 			return getRuleContext(Argumentos_opcionalContext.class,0);
 		}
-		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
 		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
 		public ChamadaContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2491,21 +2504,21 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public ArrayList<String> caseCode;
 		public ConstantesContext constantes;
 		public ComandosContext comandos;
+		public ConstantesContext constantes(int i) {
+			return getRuleContext(ConstantesContext.class,i);
+		}
 		public ComandosContext comandos(int i) {
 			return getRuleContext(ComandosContext.class,i);
 		}
 		public TerminalNode COLON(int i) {
 			return getToken(LAGrammar1_CodeGenParser.COLON, i);
 		}
-		public List<ComandosContext> comandos() {
-			return getRuleContexts(ComandosContext.class);
-		}
 		public List<TerminalNode> COLON() { return getTokens(LAGrammar1_CodeGenParser.COLON); }
-		public ConstantesContext constantes(int i) {
-			return getRuleContext(ConstantesContext.class,i);
-		}
 		public List<ConstantesContext> constantes() {
 			return getRuleContexts(ConstantesContext.class);
+		}
+		public List<ComandosContext> comandos() {
+			return getRuleContexts(ComandosContext.class);
 		}
 		public SelecaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2572,11 +2585,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String data;
 		public Numero_intervaloContext numero_intervalo;
 		public Mais_constantesContext mais_constantes;
-		public Mais_constantesContext mais_constantes() {
-			return getRuleContext(Mais_constantesContext.class,0);
-		}
 		public Numero_intervaloContext numero_intervalo() {
 			return getRuleContext(Numero_intervaloContext.class,0);
+		}
+		public Mais_constantesContext mais_constantes() {
+			return getRuleContext(Mais_constantesContext.class,0);
 		}
 		public ConstantesContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2664,13 +2677,13 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	}
 
 	public static class Numero_intervaloContext extends ParserRuleContext {
+		public Intervalo_opcionalContext intervalo_opcional() {
+			return getRuleContext(Intervalo_opcionalContext.class,0);
+		}
 		public Op_unarioContext op_unario() {
 			return getRuleContext(Op_unarioContext.class,0);
 		}
 		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
-		public Intervalo_opcionalContext intervalo_opcional() {
-			return getRuleContext(Intervalo_opcionalContext.class,0);
-		}
 		public Numero_intervaloContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2708,10 +2721,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	}
 
 	public static class Intervalo_opcionalContext extends ParserRuleContext {
+		public TerminalNode TWODOTS() { return getToken(LAGrammar1_CodeGenParser.TWODOTS, 0); }
 		public Op_unarioContext op_unario() {
 			return getRuleContext(Op_unarioContext.class,0);
 		}
-		public TerminalNode TWODOTS() { return getToken(LAGrammar1_CodeGenParser.TWODOTS, 0); }
 		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
 		public Intervalo_opcionalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2873,8 +2886,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	}
 
 	public static class Op_multiplicacaoContext extends ParserRuleContext {
-		public TerminalNode DIV() { return getToken(LAGrammar1_CodeGenParser.DIV, 0); }
 		public TerminalNode MULT() { return getToken(LAGrammar1_CodeGenParser.MULT, 0); }
+		public TerminalNode DIV() { return getToken(LAGrammar1_CodeGenParser.DIV, 0); }
 		public Op_multiplicacaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2916,8 +2929,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	}
 
 	public static class Op_adicaoContext extends ParserRuleContext {
-		public TerminalNode MINUS() { return getToken(LAGrammar1_CodeGenParser.MINUS, 0); }
 		public TerminalNode PLUS() { return getToken(LAGrammar1_CodeGenParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(LAGrammar1_CodeGenParser.MINUS, 0); }
 		public Op_adicaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3030,6 +3043,9 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class Outros_termosContext extends ParserRuleContext {
 		public String val;
 		public TermoContext termo;
+		public Op_adicaoContext op_adicao(int i) {
+			return getRuleContext(Op_adicaoContext.class,i);
+		}
 		public List<TermoContext> termo() {
 			return getRuleContexts(TermoContext.class);
 		}
@@ -3038,9 +3054,6 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		}
 		public List<Op_adicaoContext> op_adicao() {
 			return getRuleContexts(Op_adicaoContext.class);
-		}
-		public Op_adicaoContext op_adicao(int i) {
-			return getRuleContext(Op_adicaoContext.class,i);
 		}
 		public Outros_termosContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3159,17 +3172,17 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class Outros_fatoresContext extends ParserRuleContext {
 		public String val;
 		public FatorContext fator;
-		public List<Op_multiplicacaoContext> op_multiplicacao() {
-			return getRuleContexts(Op_multiplicacaoContext.class);
-		}
-		public FatorContext fator(int i) {
-			return getRuleContext(FatorContext.class,i);
-		}
 		public List<FatorContext> fator() {
 			return getRuleContexts(FatorContext.class);
 		}
+		public List<Op_multiplicacaoContext> op_multiplicacao() {
+			return getRuleContexts(Op_multiplicacaoContext.class);
+		}
 		public Op_multiplicacaoContext op_multiplicacao(int i) {
 			return getRuleContext(Op_multiplicacaoContext.class,i);
+		}
+		public FatorContext fator(int i) {
+			return getRuleContext(FatorContext.class,i);
 		}
 		public Outros_fatoresContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3232,14 +3245,14 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Op_unarioContext op_unario;
 		public Parcela_unarioContext parcela_unario;
 		public Parcela_nao_unarioContext parcela_nao_unario;
+		public Parcela_nao_unarioContext parcela_nao_unario() {
+			return getRuleContext(Parcela_nao_unarioContext.class,0);
+		}
 		public Parcela_unarioContext parcela_unario() {
 			return getRuleContext(Parcela_unarioContext.class,0);
 		}
 		public Op_unarioContext op_unario() {
 			return getRuleContext(Op_unarioContext.class,0);
-		}
-		public Parcela_nao_unarioContext parcela_nao_unario() {
-			return getRuleContext(Parcela_nao_unarioContext.class,0);
 		}
 		public ParcelaContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3314,27 +3327,27 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Chamada_parteContext chamada_parte;
 		public Chamada_metodoContext chamada_metodo;
 		public ExpressaoContext expressao;
+		public TerminalNode UP_HAT() { return getToken(LAGrammar1_CodeGenParser.UP_HAT, 0); }
+		public TerminalNode NUM_REAL() { return getToken(LAGrammar1_CodeGenParser.NUM_REAL, 0); }
 		public DimensaoContext dimensao() {
 			return getRuleContext(DimensaoContext.class,0);
 		}
-		public TerminalNode UP_HAT() { return getToken(LAGrammar1_CodeGenParser.UP_HAT, 0); }
-		public ExpressaoContext expressao() {
-			return getRuleContext(ExpressaoContext.class,0);
-		}
-		public Outros_identContext outros_ident() {
-			return getRuleContext(Outros_identContext.class,0);
-		}
-		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
-		public TerminalNode NUM_REAL() { return getToken(LAGrammar1_CodeGenParser.NUM_REAL, 0); }
-		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
-		public Chamada_metodoContext chamada_metodo() {
-			return getRuleContext(Chamada_metodoContext.class,0);
-		}
-		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
-		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
 		public Chamada_parteContext chamada_parte() {
 			return getRuleContext(Chamada_parteContext.class,0);
 		}
+		public ExpressaoContext expressao() {
+			return getRuleContext(ExpressaoContext.class,0);
+		}
+		public TerminalNode LPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.LPARENTHESIS, 0); }
+		public TerminalNode NUM_INT() { return getToken(LAGrammar1_CodeGenParser.NUM_INT, 0); }
+		public Outros_identContext outros_ident() {
+			return getRuleContext(Outros_identContext.class,0);
+		}
+		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
+		public Chamada_metodoContext chamada_metodo() {
+			return getRuleContext(Chamada_metodoContext.class,0);
+		}
+		public TerminalNode RPARENTHESIS() { return getToken(LAGrammar1_CodeGenParser.RPARENTHESIS, 0); }
 		public Parcela_unarioContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3455,10 +3468,10 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public DimensaoContext dimensao() {
 			return getRuleContext(DimensaoContext.class,0);
 		}
+		public TerminalNode CADEIA() { return getToken(LAGrammar1_CodeGenParser.CADEIA, 0); }
 		public Outros_identContext outros_ident() {
 			return getRuleContext(Outros_identContext.class,0);
 		}
-		public TerminalNode CADEIA() { return getToken(LAGrammar1_CodeGenParser.CADEIA, 0); }
 		public TerminalNode IDENT() { return getToken(LAGrammar1_CodeGenParser.IDENT, 0); }
 		public Parcela_nao_unarioContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3727,11 +3740,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 
 	public static class Op_opcionalContext extends ParserRuleContext {
 		public boolean b;
-		public Exp_aritmeticaContext exp_aritmetica() {
-			return getRuleContext(Exp_aritmeticaContext.class,0);
-		}
 		public Op_relacionalContext op_relacional() {
 			return getRuleContext(Op_relacionalContext.class,0);
+		}
+		public Exp_aritmeticaContext exp_aritmetica() {
+			return getRuleContext(Exp_aritmeticaContext.class,0);
 		}
 		public Op_opcionalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3824,11 +3837,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String val;
 		public Termo_logicoContext termo_logico;
 		public Outros_termos_logicosContext outros_termos_logicos;
-		public Termo_logicoContext termo_logico() {
-			return getRuleContext(Termo_logicoContext.class,0);
-		}
 		public Outros_termos_logicosContext outros_termos_logicos() {
 			return getRuleContext(Outros_termos_logicosContext.class,0);
+		}
+		public Termo_logicoContext termo_logico() {
+			return getRuleContext(Termo_logicoContext.class,0);
 		}
 		public ExpressaoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3923,11 +3936,11 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public String val;
 		public Fator_logicoContext fator_logico;
 		public Outros_fatores_logicosContext outros_fatores_logicos;
-		public Outros_fatores_logicosContext outros_fatores_logicos() {
-			return getRuleContext(Outros_fatores_logicosContext.class,0);
-		}
 		public Fator_logicoContext fator_logico() {
 			return getRuleContext(Fator_logicoContext.class,0);
+		}
+		public Outros_fatores_logicosContext outros_fatores_logicos() {
+			return getRuleContext(Outros_fatores_logicosContext.class,0);
 		}
 		public Termo_logicoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -4053,15 +4066,15 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class Outros_fatores_logicosContext extends ParserRuleContext {
 		public String val;
 		public Fator_logicoContext fator_logico;
-		public List<TerminalNode> AND() { return getTokens(LAGrammar1_CodeGenParser.AND); }
-		public Fator_logicoContext fator_logico(int i) {
-			return getRuleContext(Fator_logicoContext.class,i);
+		public TerminalNode AND(int i) {
+			return getToken(LAGrammar1_CodeGenParser.AND, i);
 		}
 		public List<Fator_logicoContext> fator_logico() {
 			return getRuleContexts(Fator_logicoContext.class);
 		}
-		public TerminalNode AND(int i) {
-			return getToken(LAGrammar1_CodeGenParser.AND, i);
+		public List<TerminalNode> AND() { return getTokens(LAGrammar1_CodeGenParser.AND); }
+		public Fator_logicoContext fator_logico(int i) {
+			return getRuleContext(Fator_logicoContext.class,i);
 		}
 		public Outros_fatores_logicosContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -4178,8 +4191,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public Exp_relacionalContext exp_relacional() {
 			return getRuleContext(Exp_relacionalContext.class,0);
 		}
-		public TerminalNode FALSO() { return getToken(LAGrammar1_CodeGenParser.FALSO, 0); }
 		public TerminalNode VERDADEIRO() { return getToken(LAGrammar1_CodeGenParser.VERDADEIRO, 0); }
+		public TerminalNode FALSO() { return getToken(LAGrammar1_CodeGenParser.FALSO, 0); }
 		public Parcela_logicaContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
