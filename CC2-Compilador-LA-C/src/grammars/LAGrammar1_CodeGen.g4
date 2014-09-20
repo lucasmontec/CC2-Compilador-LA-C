@@ -496,6 +496,8 @@ cmd
                 tokenType(fullToken)+" nao pode receber a expressao"+
                 " do tipo "+$expressao.val
                 ,$IDENT.getLine());
+                
+           $code = Generator.attribPointer($IDENT.text+ $outros_ident.fullName, $dimensao.text, $expressao.text);
        }
    |   IDENT chamada /*Chamada de funcao regra 30b*/
        /*Verifica se o token esta declarado e se os tipos batem*/

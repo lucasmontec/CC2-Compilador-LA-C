@@ -327,7 +327,16 @@ public class Generator {
 
         leaveScope();
 
+        code += "}";
+        
         return code;
+    }
+    
+    public static String attribPointer(String fullName, String dim, String expression){
+        String flavia = "";
+        flavia+= ident+"*"+fullName+dim+" = "+normalizeExpression(expression);
+        return flavia;
+        
     }
 
 }

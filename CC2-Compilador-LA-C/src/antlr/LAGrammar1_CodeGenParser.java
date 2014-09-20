@@ -1824,6 +1824,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 		public SelecaoContext selecao;
 		public Token IDENT;
 		public Outros_identContext outros_ident;
+		public DimensaoContext dimensao;
 		public ChamadaContext chamada;
 		public AtribuicaoContext atribuicao;
 		public Token RETORNE;
@@ -2065,7 +2066,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				setState(410); match(UP_HAT);
 				setState(411); ((CmdContext)_localctx).IDENT = match(IDENT);
 				setState(412); ((CmdContext)_localctx).outros_ident = outros_ident();
-				setState(413); dimensao();
+				setState(413); ((CmdContext)_localctx).dimensao = dimensao();
 				setState(414); match(ARROW);
 				setState(415); ((CmdContext)_localctx).expressao = expressao();
 
@@ -2083,6 +2084,8 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				                tokenType(fullToken)+" nao pode receber a expressao"+
 				                " do tipo "+((CmdContext)_localctx).expressao.val
 				                ,((CmdContext)_localctx).IDENT.getLine());
+				                
+				           ((CmdContext)_localctx).code =  Generator.attribPointer((((CmdContext)_localctx).IDENT!=null?((CmdContext)_localctx).IDENT.getText():null)+ ((CmdContext)_localctx).outros_ident.fullName, (((CmdContext)_localctx).dimensao!=null?_input.getText(((CmdContext)_localctx).dimensao.start,((CmdContext)_localctx).dimensao.stop):null), (((CmdContext)_localctx).expressao!=null?_input.getText(((CmdContext)_localctx).expressao.start,((CmdContext)_localctx).expressao.stop):null));
 				       
 				}
 				break;
