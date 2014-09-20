@@ -36,7 +36,7 @@ public class Generator {
         code.append(cd);
     }
 
-    private static String normalizeExpression(String inputExp) {
+    public static String normalizeExpression(String inputExp) {
         String result = inputExp;
         Pattern equalPattern = Pattern.compile("[^<>](=)");
 
@@ -106,6 +106,41 @@ public class Generator {
         return code.toString();
     }
 
+    public static String method(String identifier, ArrayList<String> names, 
+      ArrayList<String> types, boolean isFunc, String returnType, String foreignCode) {
+        StringBuilder code = new StringBuilder();
+        String aux = "";
+        //Se for uma função
+        if (isFunc) {
+            aux = makeVariable(identifier, returnType, "").replace(";", "").replace("^", "*");
+            code.append(aux);
+        } else { //Se for uma procedimento
+            aux = "void " + identifier;
+            code.append(aux);
+        }
+
+
+        code.append("(");
+        if (names.size() > 0) {
+            aux = makeVariable(names.get(0), types.get(0), "").replace(";", "");
+            code.append(aux);
+            for (int i = 1; i < names.size(); i++) {
+                aux = ", " + makeVariable(names.get(i), types.get(i), "").replace(";", "").replace("^", "*");
+                //System.out.println(aux);
+                code.append(aux);
+                //aux = ", " + types.get(i) + " " + names.get(i);
+                //code.append(aux);            }                 
+            }
+        }
+        code.append("){\n");
+        code.append(ident);
+        code.append(foreignCode);
+        code.append(ident);
+        code.append("}\n");
+        
+        return code.toString();
+         
+    }
     public static String write(ArrayList<String> names, ArrayList<String> types) {
         StringBuilder code = new StringBuilder();
         code.append(ident);
@@ -231,7 +266,7 @@ public class Generator {
                 blob = "char " + nome + vec + "[150];";
                 break;
             case "logico":
-                blob = "bool " + nome + vec + ";";
+                blob = "int " + nome + vec + ";";
                 break;
             default:
                 /*TODO struct e tipos custom*/

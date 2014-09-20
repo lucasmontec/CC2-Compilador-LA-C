@@ -80,15 +80,16 @@ public class TesteLAScripts {
             + "fim_algoritmo";
 
     public static String algoritmo_7
-            = "funcao demonio(var x : logico): logico\n"
-            + "	retorne x  ou nao x\n"
+            = "funcao demonio(var x[5] : logico, var ^y: inteiro): logico\n"
+            + "x[0] <- verdadeiro\n	"
+            + "retorne x  ou nao x\n"
             + "fim_funcao\n"
             + "\n"
             + "algoritmo\n"
             + "  declare\n"
             + "    x: logico\n"
             + "  \n"
-            + "    x <- (( verdadeiro ou falso ) e verdadeiro ) ou demonio(falso)\n"
+            + "    x <- (( verdadeiro ou falso ) e verdadeiro ) ou demonio(falso, 50)\n"
             + "    escreva(x)\n"
             + "fim_algoritmo";
 
