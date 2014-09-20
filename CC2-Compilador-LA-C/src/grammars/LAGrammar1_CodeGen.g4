@@ -243,17 +243,26 @@ valor_constante
 
 /*18. Registros - Struct*/
 registro
-    returns [ String val ]
-    @init{ $val = "$"; }
+    returns [ String val, String code ]
+    @init{ $val = "$"; $code = ""; }
     :
      REGISTRO variavel 
      { $val += "[";
         for(String s: $variavel.names)
-            $val += s + ":" +$variavel.t+",";         
+            $val += s + ":" +$variavel.t+",";
+       
+       $code += "struct{ \n";
+       $code += "\t"+ Generator.converteTipo($variavel.t) + " ";
+       for(String s: $variavel.names){
+         $code += s + ",";
+       }
+       $code = $code.substring(0, $code.length() - 1)+ ";\n";
      }
      mais_variaveis { 
                      for(Map.Entry<String, String> e: $mais_variaveis.nomes.entrySet()){                     
                         $val += ","+e.getKey()+":"+e.getValue();
+                        
+                        $code += Generator.converteTipo(e.getValue())+ " " + e.getKey() + ";\n";
                      }
                     }
      FIM_REGISTRO
@@ -261,6 +270,9 @@ registro
       $val += "]";
       /*Registra o tipo pra in-line*/
       top().addToken($val,$val);
+      
+      $code += "}";
+      System.out.println($code);
       }
     ;
 
