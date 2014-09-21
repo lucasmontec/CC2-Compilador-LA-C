@@ -48,7 +48,7 @@ public class Generator {
     
     public static void publishLog(String fileName, String contents) throws IOException{
         FileWriter writer = new FileWriter(fileName
-                .replace(".alg", "").replace(".txt", "")+".txt");
+                .replace(".alg", ""));
         writer.write(contents);
         writer.flush();
         writer.close();
@@ -287,24 +287,29 @@ public class Generator {
 
     private static String makeVariable(String nome, String tipo, String vec) {
         String blob = "";
+        String ptr = "";
+        if(tipo.contains("^")){
+            tipo = tipo.replace("^", "");
+            ptr = "*";
+        }
         switch (tipo) {
             case "inteiro":
-                blob = "int " + nome + vec + ";";
+                blob = "int " + ptr + nome + vec + ";";
                 break;
             case "real":
-                blob = "float " + nome + vec + ";";
+                blob = "float " + ptr + nome + vec + ";";
                 break;
             case "literal":
-                blob = "char " + nome + vec + "[150];";
+                blob = "char " + ptr + nome + vec + "[150];";
                 break;
             case "logico":
-                blob = "int " + nome + vec + ";";
+                blob = "int " + ptr + nome + vec + ";";
                 break;
             default:
                 blob = tipo+" "+nome+vec+";";
                 break;
         }
-        return blob.replace("^","*");
+        return blob;
     }
 
     public static void reset() {

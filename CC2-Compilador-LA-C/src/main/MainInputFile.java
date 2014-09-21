@@ -65,7 +65,7 @@ public class MainInputFile {
                 System.err.println("Semantic errors:");
                 SemanticUtil.printErrors();
                 try {
-                    Generator.publishLog(args[0], SemanticUtil.listErrors());
+                    Generator.publishLog(args[0]+"_semanticErrors.txt", SemanticUtil.listErrors());
                 } catch (IOException ex) {
                     Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -73,7 +73,7 @@ public class MainInputFile {
             if(parser.getNumberOfSyntaxErrors() > 0){
                 System.err.println(SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
                 try {
-                    Generator.publishLog(args[0], SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
+                    Generator.publishLog(args[0]+"_syntaxErrors.txt", SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
                 } catch (IOException ex) {
                     Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
