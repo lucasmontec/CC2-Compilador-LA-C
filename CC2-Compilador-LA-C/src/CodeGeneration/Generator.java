@@ -107,7 +107,7 @@ public class Generator {
         code.append(expIni);
         code.append(";");
         code.append(counter);
-        code.append("<");
+        code.append("<=");
         code.append(expFim);
         code.append(";");
         code.append(counter);
