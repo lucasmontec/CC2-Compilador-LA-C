@@ -73,7 +73,7 @@ public class MainInputFile {
         LAGrammar1_CodeGenParser parser = new LAGrammar1_CodeGenParser(stream);
         
         parser.addErrorListener(SyntaticErrorHandlerSaidaPadronizada.INSTANCE);
-        parser.addErrorListener(LexErrorHandlerSaidaPadronizada.INSTANCE);
+        lexer.addErrorListener(LexErrorHandlerSaidaPadronizada.INSTANCE);
         
         //Chama o token inicial
         parser.programa();

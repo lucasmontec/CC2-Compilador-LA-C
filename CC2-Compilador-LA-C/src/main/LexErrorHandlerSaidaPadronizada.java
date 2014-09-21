@@ -31,10 +31,10 @@ public class LexErrorHandlerSaidaPadronizada extends BaseErrorListener {
             token = token.substring(0,1);
         
         if(token.equals("{")) {
-            SErrorList.sErrors.add("Linha " + (line+1) + ": comentario nao fechado\n");
+            SErrorList.sErrors.add("Linha " + (line+1) + ": comentario nao fechado");
         }
         else {
-            SErrorList.sErrors.add("Linha " + line + ": " + token + " - simbolo nao identificado\n");
+            SErrorList.sErrors.add("Linha " + line + ": " + token + " - simbolo nao identificado");
         }
     }
 }
