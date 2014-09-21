@@ -55,6 +55,7 @@ public class MainInputFile {
         CommonTokenStream stream = new CommonTokenStream(lexer);
         //Parser do programa
         LAGrammar1_CodeGenParser parser = new LAGrammar1_CodeGenParser(stream);
+        parser.addErrorListener(SyntaticErrorHandler.INSTANCE);
         
         //Chama o token inicial
         parser.programa();
@@ -63,9 +64,19 @@ public class MainInputFile {
             if(SemanticUtil.hasErrors()){
                 System.err.println("Semantic errors:");
                 SemanticUtil.printErrors();
+                try {
+                    Generator.publishLog(args[0], SemanticUtil.listErrors());
+                } catch (IOException ex) {
+                    Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             if(parser.getNumberOfSyntaxErrors() > 0){
-                System.err.println("Syntatic errors.");
+                System.err.println(SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
+                try {
+                    Generator.publishLog(args[0], SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
+                } catch (IOException ex) {
+                    Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }else{
             System.out.println("Compilation successful!");

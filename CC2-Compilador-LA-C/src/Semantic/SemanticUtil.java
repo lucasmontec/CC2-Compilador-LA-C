@@ -129,5 +129,13 @@ public class SemanticUtil {
         }
         System.out.println("Errors{\n" +body+ "\n}");
     }
+    
+    public static String listErrors(){
+        String body = "";
+        for (SemanticError ts : errors) {
+            body += ts+"\n";
+        }
+        return "Erros semanticos:\n" +body;
+    }
 
 }

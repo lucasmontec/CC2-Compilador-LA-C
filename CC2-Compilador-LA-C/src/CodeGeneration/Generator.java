@@ -45,6 +45,14 @@ public class Generator {
         writer.flush();
         writer.close();
     }
+    
+    public static void publishLog(String fileName, String contents) throws IOException{
+        FileWriter writer = new FileWriter(fileName
+                .replace(".alg", "").replace(".txt", "")+".txt");
+        writer.write(contents);
+        writer.flush();
+        writer.close();
+    }
 
     public static String normalizeExpression(String inputExp) {
         String result = inputExp;
@@ -257,7 +265,7 @@ public class Generator {
     public static void declareVariablesStruct(ArrayList<String> nomes, String structCode) {
         String blob = ident+structCode.replace(";\n", ";\n\t");
         for(String nome : nomes){ 
-            blob += " "+nome;
+            blob += " "+nome.replace("^","*");
         }
         blob += ";\n";
         code.append(blob);
@@ -296,7 +304,7 @@ public class Generator {
                 blob = tipo+" "+nome+vec+";";
                 break;
         }
-        return blob;
+        return blob.replace("^","*");
     }
 
     public static void reset() {
@@ -424,7 +432,7 @@ public class Generator {
                 blob = tipo;
                 break;
         } 
-        return blob;
+        return blob.replace("^","*");
                 
     }
     
