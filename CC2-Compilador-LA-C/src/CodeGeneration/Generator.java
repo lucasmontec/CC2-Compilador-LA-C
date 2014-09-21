@@ -40,15 +40,14 @@ public class Generator {
     }
     
     public static void publishCode(String fileName) throws IOException{
-        FileWriter writer = new FileWriter(fileName+".c");
+        FileWriter writer = new FileWriter(fileName);
         writer.write(code.toString());
         writer.flush();
         writer.close();
     }
     
     public static void publishLog(String fileName, String contents) throws IOException{
-        FileWriter writer = new FileWriter(fileName
-                .replace(".alg", ""));
+        FileWriter writer = new FileWriter(fileName);
         writer.write(contents);
         writer.flush();
         writer.close();
@@ -170,7 +169,7 @@ public class Generator {
         String mods = "\"";
         //Collections.reverse(names);
         for (String e : types) {
-            mods += mod(e) + " ";
+            mods += mod(e);
         }
         mods = mods.trim() + "\"";
         code.append(mods);
@@ -406,7 +405,7 @@ public class Generator {
     
     public static String attribPointer(String fullName, String dim, String expression){
         String flavia = "";
-        flavia+= ident+"*"+fullName+dim+" = "+normalizeExpression(expression);
+        flavia+= ident+"*"+fullName+dim+" = "+normalizeExpression(expression)+";";
         return flavia;
         
     }

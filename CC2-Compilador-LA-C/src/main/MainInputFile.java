@@ -29,9 +29,25 @@ public class MainInputFile {
     public static void main(String ...args){
         //System.out.println(Arrays.toString(args));
         
+        String outputFile = "";
+        String inputFile = "";
+          
+        if(args.length == 0)
+            return;
+        
+        if(args.length == 1){
+            inputFile = outputFile = args[0];
+            outputFile += ".c";
+        }
+        
+        if(args.length == 2){
+            inputFile = args[0];
+            outputFile = args[1];
+        }
+        
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream(new File(args[0]));
+            fis = new FileInputStream(new File(inputFile));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -55,7 +71,9 @@ public class MainInputFile {
         CommonTokenStream stream = new CommonTokenStream(lexer);
         //Parser do programa
         LAGrammar1_CodeGenParser parser = new LAGrammar1_CodeGenParser(stream);
-        parser.addErrorListener(SyntaticErrorHandler.INSTANCE);
+        
+        parser.addErrorListener(SyntaticErrorHandlerSaidaPadronizada.INSTANCE);
+        parser.addErrorListener(LexErrorHandlerSaidaPadronizada.INSTANCE);
         
         //Chama o token inicial
         parser.programa();
@@ -65,7 +83,7 @@ public class MainInputFile {
                 System.err.println("Semantic errors:");
                 SemanticUtil.printErrors();
                 try {
-                    Generator.publishLog(args[0]+"_semanticErrors.txt", SemanticUtil.listErrors());
+                    Generator.publishLog(outputFile, SemanticUtil.listErrors());
                 } catch (IOException ex) {
                     Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -73,7 +91,9 @@ public class MainInputFile {
             if(parser.getNumberOfSyntaxErrors() > 0){
                 System.err.println(SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
                 try {
-                    Generator.publishLog(args[0]+"_syntaxErrors.txt", SyntaticErrorHandler.INSTANCE.listSyntaticErrors());
+                    if(SErrorList.sErrors.size() > 0){
+                        Generator.publishLog(outputFile,SErrorList.sErrors.get(0)+"\nFim da compilacao\n");
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -81,7 +101,7 @@ public class MainInputFile {
         }else{
             System.out.println("Compilation successful!");
             try {
-                Generator.publishCode(args[0]);
+                Generator.publishCode(outputFile);
             } catch (IOException ex) {
                 Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
             }

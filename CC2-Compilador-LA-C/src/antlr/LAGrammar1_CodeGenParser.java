@@ -2170,7 +2170,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				                +"\nAssinatura esperada: "+getSignature((((CmdContext)_localctx).IDENT!=null?((CmdContext)_localctx).IDENT.getText():null))
 				                ,((CmdContext)_localctx).IDENT.getLine());
 				                
-				         ((CmdContext)_localctx).code =  (((CmdContext)_localctx).IDENT!=null?((CmdContext)_localctx).IDENT.getText():null)+(((CmdContext)_localctx).chamada!=null?_input.getText(((CmdContext)_localctx).chamada.start,((CmdContext)_localctx).chamada.stop):null) ;
+				         ((CmdContext)_localctx).code =  (((CmdContext)_localctx).IDENT!=null?((CmdContext)_localctx).IDENT.getText():null)+(((CmdContext)_localctx).chamada!=null?_input.getText(((CmdContext)_localctx).chamada.start,((CmdContext)_localctx).chamada.stop):null)+";";
 				       
 				}
 				break;

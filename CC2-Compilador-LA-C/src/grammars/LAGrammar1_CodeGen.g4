@@ -538,7 +538,6 @@ cmd
        }
        
    |   UP_HAT IDENT outros_ident dimensao ARROW expressao /*Atrib de ponteiro*/
-       /*TODO - TYPECHECK*/
        /*Verifica se o token esta declarado*/
        {
             if(!isTokenPresent($IDENT.text))
@@ -570,7 +569,7 @@ cmd
                 +"\nAssinatura esperada: "+getSignature($IDENT.text)
                 ,$IDENT.getLine());
                 
-         $code = $IDENT.text+$chamada.text ;
+         $code = $IDENT.text+$chamada.text+";";
        }
        
    |   atribuicao  { $code = $atribuicao.code ; }/*Atribuicao regra 30a*/
