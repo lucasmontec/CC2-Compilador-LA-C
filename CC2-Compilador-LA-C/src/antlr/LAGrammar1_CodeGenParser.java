@@ -1,4 +1,4 @@
-// Generated from C:\Users\Luccas\Documents\NetBeansProjects\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1_CodeGen.g4 by ANTLR 4.1
+// Generated from C:\Users\Lucas\git\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1_CodeGen.g4 by ANTLR 4.1
 package antlr;
 
   import Semantic.TokenSymbol;
@@ -134,12 +134,9 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			setState(124); corpo();
 			setState(125); match(FIM_ALGORITMO);
 
-			                if(hasErrors())
-			                   printErrors();
 			                /*printSignatures();*/
 			                pop();/*Decl globais*/
 			                Generator.endAlgorithm();
-			                Generator.printCode();
 			            
 			}
 		}
@@ -393,6 +390,14 @@ public class LAGrammar1_CodeGenParser extends Parser {
 				        else
 				          top().addToken((((Declaracao_localContext)_localctx).IDENT!=null?((Declaracao_localContext)_localctx).IDENT.getText():null), ((Declaracao_localContext)_localctx).tipo.val);
 				        ((Declaracao_localContext)_localctx).val =  ((Declaracao_localContext)_localctx).tipo.val;
+				        
+				        String tp = Generator.converteTipo(((Declaracao_localContext)_localctx).tipo.val);
+				        
+				        if(((Declaracao_localContext)_localctx).tipo.code.length() > 0){
+				            tp = ((Declaracao_localContext)_localctx).tipo.code;           
+				        }
+				        
+				        Generator.addCode(Generator.typedef((((Declaracao_localContext)_localctx).IDENT!=null?((Declaracao_localContext)_localctx).IDENT.getText():null), tp));
 				     
 				}
 				break;
@@ -414,6 +419,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public static class VariavelContext extends ParserRuleContext {
 		public ArrayList<String> names;
 		public String t;
+		public String dim;
 		public Token IDENT;
 		public DimensaoContext dimensao;
 		public Mais_varContext mais_var;
@@ -446,7 +452,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public final VariavelContext variavel() throws RecognitionException {
 		VariavelContext _localctx = new VariavelContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_variavel);
-		 ((VariavelContext)_localctx).names =  new ArrayList<>(); ((VariavelContext)_localctx).t =  ""; 
+		 ((VariavelContext)_localctx).names =  new ArrayList<>(); ((VariavelContext)_localctx).t =  ""; ((VariavelContext)_localctx).dim =  ""; 
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -459,13 +465,23 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			            ((VariavelContext)_localctx).t =  ((VariavelContext)_localctx).tipo.val;
 			            _localctx.names.add((((VariavelContext)_localctx).IDENT!=null?((VariavelContext)_localctx).IDENT.getText():null));
 			            _localctx.names.addAll(((VariavelContext)_localctx).mais_var.nomes);
-			            Generator.declareVariable((((VariavelContext)_localctx).IDENT!=null?((VariavelContext)_localctx).IDENT.getText():null), ((VariavelContext)_localctx).tipo.val, (((VariavelContext)_localctx).dimensao!=null?_input.getText(((VariavelContext)_localctx).dimensao.start,((VariavelContext)_localctx).dimensao.stop):null));
 			            
-			            for(int i=0; i<((VariavelContext)_localctx).mais_var.nomes.size();i++){
-			               String n = ((VariavelContext)_localctx).mais_var.nomes.get(i);
-			               String dim = ((VariavelContext)_localctx).mais_var.dims.get(i);
-			               Generator.declareVariable(n, ((VariavelContext)_localctx).tipo.val, dim);                 
+			            if(((VariavelContext)_localctx).tipo.code.length() > 0){
+			                ArrayList<String> nomes = new ArrayList<>(((VariavelContext)_localctx).mais_var.nomes);
+			                nomes.add((((VariavelContext)_localctx).IDENT!=null?((VariavelContext)_localctx).IDENT.getText():null));
+			                Generator.declareVariablesStruct(nomes, ((VariavelContext)_localctx).tipo.code);      
+			            }else{
+			                Generator.declareVariable((((VariavelContext)_localctx).IDENT!=null?((VariavelContext)_localctx).IDENT.getText():null), ((VariavelContext)_localctx).tipo.val, (((VariavelContext)_localctx).dimensao!=null?_input.getText(((VariavelContext)_localctx).dimensao.start,((VariavelContext)_localctx).dimensao.stop):null));
+			                
+			                for(int i=0; i<((VariavelContext)_localctx).mais_var.nomes.size();i++){
+			                    String n = ((VariavelContext)_localctx).mais_var.nomes.get(i);
+			                    String dim = ((VariavelContext)_localctx).mais_var.dims.get(i);
+			                    Generator.declareVariable(n, ((VariavelContext)_localctx).tipo.val, dim);                 
+			                }
 			            }
+			            
+			            ((VariavelContext)_localctx).dim =  (((VariavelContext)_localctx).dimensao!=null?_input.getText(((VariavelContext)_localctx).dimensao.start,((VariavelContext)_localctx).dimensao.stop):null);
+			 
 			         
 			}
 		}
@@ -789,6 +805,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 
 	public static class TipoContext extends ParserRuleContext {
 		public String val;
+		public String code;
 		public RegistroContext registro;
 		public Tipo_estendidoContext tipo_estendido;
 		public Tipo_estendidoContext tipo_estendido() {
@@ -814,7 +831,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 	public final TipoContext tipo() throws RecognitionException {
 		TipoContext _localctx = new TipoContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_tipo);
-		 ((TipoContext)_localctx).val =  ""; 
+		 ((TipoContext)_localctx).val =  ""; ((TipoContext)_localctx).code =  ""; 
 		try {
 			setState(210);
 			switch (_input.LA(1)) {
@@ -825,6 +842,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 
 				              ((TipoContext)_localctx).val = ((TipoContext)_localctx).registro.val;
 				              /*match de string da definicao de registro*/
+				              ((TipoContext)_localctx).code =  ((TipoContext)_localctx).registro.code;
 				              
 				}
 				break;
@@ -1282,8 +1300,12 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			       
 			       _localctx.code += "struct{ \n";
 			       _localctx.code += "\t"+ Generator.converteTipo(((RegistroContext)_localctx).variavel.t) + " ";
+			       String extraDim = "";
+			       if(((RegistroContext)_localctx).variavel.t.equals("literal")){
+			             extraDim  = "[150]";
+			       }
 			       for(String s: ((RegistroContext)_localctx).variavel.names){
-			         _localctx.code += s + ",";
+			         _localctx.code += s + ((RegistroContext)_localctx).variavel.dim + extraDim + ",";
 			       }
 			       ((RegistroContext)_localctx).code =  _localctx.code.substring(0, _localctx.code.length() - 1)+ ";\n";
 			     
@@ -1302,7 +1324,7 @@ public class LAGrammar1_CodeGenParser extends Parser {
 			      top().addToken(_localctx.val,_localctx.val);
 			      
 			      _localctx.code += "}";
-			      System.out.println(_localctx.code);
+			      //System.out.println(_localctx.code);
 			      
 			}
 		}

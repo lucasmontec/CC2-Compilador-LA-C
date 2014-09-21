@@ -115,6 +115,18 @@ public class TesteLAScripts {
             + "  reg.idade <- 24\n"
             + "  escreva(reg.nome,\" tem \",reg.idade,\" anos\")"
             + "fim_algoritmo";
+    
+    public static String algoritmo_17
+            = "algoritmo\n"
+            + "  tipo treg: registro\n"
+            + "            nome: literal\n"
+            + "            idade: inteiro\n"
+            + "          fim_registro\n"
+            + "  declare reg: treg\n"
+            + "  reg.nome <- \"Maria\"\n"
+            + "  reg.idade <- 30\n"
+            + "  escreva(reg.nome,\" tem \",reg.idade,\" anos\")\n"
+            + "fim_algoritmo";
 
     public static String algoritmo_1_erro_semantico
             = "{ dado o comprimento de um arco, calcular seu cosseno pela soma \n"

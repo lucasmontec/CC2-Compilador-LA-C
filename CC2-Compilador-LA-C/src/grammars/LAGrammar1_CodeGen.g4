@@ -24,12 +24,9 @@ programa:
             /*{ printSemanticTable(); }*/
             FIM_ALGORITMO
             {
-                if(hasErrors())
-                   printErrors();
                 /*printSignatures();*/
                 pop();/*Decl globais*/
                 Generator.endAlgorithm();
-                Generator.printCode();
             }
         ;
         
@@ -110,7 +107,7 @@ declaracao_local
         String tp = Generator.converteTipo($tipo.val);
         
         if($tipo.code.length() > 0){
-            tp = $tipo.code+";";           
+            tp = $tipo.code;           
         }
         
         Generator.addCode(Generator.typedef($IDENT.text, tp));
@@ -119,8 +116,8 @@ declaracao_local
 
 /*5. Lista de variaveis com variaveis a mais do mesmo tipo opcionais*/
 variavel
-    returns [ ArrayList<String> names, String t]
-    @init{ $names = new ArrayList<>(); $t = ""; }
+    returns [ ArrayList<String> names, String t, String dim ]
+    @init{ $names = new ArrayList<>(); $t = ""; $dim = ""; }
     :
     IDENT dimensao mais_var COLON tipo
         {
@@ -142,7 +139,8 @@ variavel
                 }
             }
             
-            
+            $dim = $dimensao.text;
+ 
          };
 
 /*6. Extens�o da lista de vari�veis*/
@@ -271,8 +269,12 @@ registro
        
        $code += "struct{ \n";
        $code += "\t"+ Generator.converteTipo($variavel.t) + " ";
+       String extraDim = "";
+       if($variavel.t.equals("literal")){
+             extraDim  = "[150]";
+       }
        for(String s: $variavel.names){
-         $code += s + ",";
+         $code += s + $variavel.dim + extraDim + ",";
        }
        $code = $code.substring(0, $code.length() - 1)+ ";\n";
      }
@@ -290,7 +292,7 @@ registro
       top().addToken($val,$val);
       
       $code += "}";
-      System.out.println($code);
+      //System.out.println($code);
       }
     ;
 

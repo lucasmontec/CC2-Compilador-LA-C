@@ -1,4 +1,4 @@
-// Generated from C:\Users\Luccas\Documents\NetBeansProjects\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1_CodeGen.g4 by ANTLR 4.1
+// Generated from C:\Users\Lucas\git\CC2-Compilador-LA-C\CC2-Compilador-LA-C\src\grammars\LAGrammar1_CodeGen.g4 by ANTLR 4.1
 package antlr;
 
   import Semantic.TokenSymbol;

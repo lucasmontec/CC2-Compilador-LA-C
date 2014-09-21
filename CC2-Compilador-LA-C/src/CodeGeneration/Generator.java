@@ -5,6 +5,9 @@
  */
 package CodeGeneration;
 
+import Semantic.SemanticUtil;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +38,13 @@ public class Generator {
     public static void addCode(String cd) {
         code.append(cd);
     }
+    
+    public static void publishCode(String fileName) throws IOException{
+        FileWriter writer = new FileWriter(fileName+".c");
+        writer.write(code.toString());
+        writer.flush();
+        writer.close();
+    }
 
     public static String normalizeExpression(String inputExp) {
         String result = inputExp;
@@ -54,8 +64,12 @@ public class Generator {
 
     public static String attrib(String id, String expression) {
         String res = "";
-        res += ident;
-        res += id + " = " + normalizeExpression(expression) + ";";
+        if(SemanticUtil.tokenType(id).equals("literal")){
+            res += ident+"strcpy( "+id+" , "+expression+");";
+        }else{
+            res += ident;
+            res += id + " = " + normalizeExpression(expression) + ";";
+        }
         return res;
     }
 
@@ -202,7 +216,7 @@ public class Generator {
                 break;
             default:
                 /*TODO struct e tipos custom*/
-                modifier = "";
+                modifier = type;
                 break;
         }
         return modifier;
@@ -241,21 +255,14 @@ public class Generator {
     }
 
     public static void declareVariablesStruct(ArrayList<String> nomes, String structCode) {
-        String blob = structCode;
-        
+        String blob = ident+structCode.replace(";\n", ";\n\t");
         for(String nome : nomes){ 
             blob += " "+nome;
         }
-        blob += ";";
+        blob += ";\n";
         code.append(blob);
     }
-       
-    public static void declareVariableStruct(String nome, String structCode) {
-        String blob = structCode;
 
-        blob += " "+nome+";";
-        code.append(blob);
-    }
     
     public static void declareVariable(String nome, String tipo) {
         declareVariable(nome, tipo, "");
@@ -286,8 +293,7 @@ public class Generator {
                 blob = "int " + nome + vec + ";";
                 break;
             default:
-                /*TODO struct e tipos custom*/
-                blob = "todo " + nome + vec + ";";
+                blob = tipo+" "+nome+vec+";";
                 break;
         }
         return blob;
@@ -298,7 +304,8 @@ public class Generator {
     }
 
     public static void includes() {
-        code.append("#include <stdio.h>\n\n");
+        code.append("#include <stdio.h>\n" +
+                    "#include <stdlib.h>\n\n");
     }
 
     public static void startAlgorithm() {
@@ -408,7 +415,7 @@ public class Generator {
                 blob = "float";
                 break;
             case "literal":
-                blob = "char[150]";
+                blob = "char";
                 break;
             case "logico":
                 blob = "int";
@@ -421,9 +428,9 @@ public class Generator {
                 
     }
     
-    private static String typedef(String nomeCustom, String tipo){
+    public static String typedef(String nomeCustom, String tipo){
         String flavia = "";
-        flavia+= "typedef "+converteTipo(tipo)+" "+nomeCustom+";";
+        flavia+= ident+"typedef "+converteTipo(tipo).replace(";\n", ";\n\t")+" "+nomeCustom+";\n";
         return flavia;
     }
     

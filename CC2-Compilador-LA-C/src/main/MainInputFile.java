@@ -6,23 +6,49 @@
 
 package main;
 
-
 import CodeGeneration.Generator;
 import Semantic.SemanticUtil;
 import antlr.LAGrammar1_CodeGenLexer;
 import antlr.LAGrammar1_CodeGenParser;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 /**
- *  Classe principal de teste de gramática.
- * 
- * @author joaovitor & Lucas M Carvalhaes
+ *
+ * @author Lucas
  */
-public class Main {
-   /* public static void main(String ...args){
+public class MainInputFile {
+    
+    public static void main(String ...args){
+        //System.out.println(Arrays.toString(args));
+        
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(new File(args[0]));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(fis == null)
+            return;
+        
         //Stream de texto
-        ANTLRInputStream inputStream = new ANTLRInputStream(TesteLAScripts.algoritmo_16);
+        ANTLRInputStream inputStream = null;
+        try {
+            inputStream = new ANTLRInputStream(fis);
+        } catch (IOException ex) {
+            Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(inputStream == null)
+            return;
+        
         //Lexer para gerar os tokens
         LAGrammar1_CodeGenLexer lexer = new LAGrammar1_CodeGenLexer(inputStream);
         //Estrutura comum de stream de tokens
@@ -43,10 +69,15 @@ public class Main {
             }
         }else{
             System.out.println("Compilation successful!");
-            Generator.printCode();
+            try {
+                Generator.publishCode(args[0]);
+            } catch (IOException ex) {
+                Logger.getLogger(MainInputFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         Generator.reset();
         SemanticUtil.reset();
-    }*/
+    }
+    
 }
